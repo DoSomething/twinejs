@@ -201,9 +201,10 @@ var StoryEditView = Marionette.CompositeView.extend(
    @param {String} name name of the passage; defaults to model default
    @param {Number} left left position; defaults to horizontal center of the window
    @param {Number} top top position; defaults to vertical center of the window
+   @param {String} type type of passage; defaults to regular Twine passage
   **/
 
-  addPassage: function (name, left, top)
+  addPassage: function (name, left, top, type)
   {
     if (! left)
     {
@@ -236,7 +237,8 @@ var StoryEditView = Marionette.CompositeView.extend(
       name: name,
       story: this.model.id,
       left: left,
-      top: top
+      top: top,
+      type: type
     });
 
     // position the passage so it doesn't overlap any others
@@ -246,28 +248,28 @@ var StoryEditView = Marionette.CompositeView.extend(
     this.children.findByModel(passage).appear();
   },
 
-  addPassageDS: function() {
-    console.log('addPassageDS');
+  addPassageDS: function(name, left, top) {
+    this.addPassage(name, left, top, 'ds');
   },
 
-  addStoryConfig: function() {
-    console.log('addStoryConfig');
+  addStoryConfig: function(name, left, top) {
+    this.addPassage(name, left, top, 'storyConfig');
   },
 
-  addPassageEndLevel: function() {
-    console.log('addPassageEndLevel');
+  addPassageEndLevel: function(name, left, top) {
+    this.addPassage(name, left, top, 'endLevel');
   },
 
-  addPassageEndGameGroup: function() {
-    console.log('addPassageEndGameGroup');
+  addPassageEndGameGroup: function(name, left, top) {
+    this.addPassage(name, left, top, 'endGameGroup`');
   },
 
-  addPassageEndGameIndividualSS: function() {
-    console.log('addPassageEndGameIndividualSS');
+  addPassageEndGameIndividualBT: function(name, left, top) {
+    this.addPassage(name, left, top, 'endGameIndividualBT');
   },
 
-  addPassageEndGameIndividualBT: function() {
-    console.log('addPassageEndGameIndividualBT');
+  addPassageEndGameIndividualSS: function(name, left, top) {
+    this.addPassage(name, left, top, 'endGameIndividualSS');
   },
 
   /**
