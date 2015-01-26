@@ -9,134 +9,159 @@
 
 StoryEditView.Toolbar = Backbone.View.extend(
 {
-	initialize: function (options)
-	{
-		this.parent = options.parent;
-		this.syncZoomButtons();
-		this.parent.model.on('change:zoom', this.syncZoomButtons, this);
-		this.parent.model.on('change:name', this.syncStoryName, this);
-	},
+  initialize: function (options)
+  {
+    this.parent = options.parent;
+    this.syncZoomButtons();
+    this.parent.model.on('change:zoom', this.syncZoomButtons, this);
+    this.parent.model.on('change:name', this.syncStoryName, this);
+  },
 
-	/**
-	 Synchronizes the story name shown with the model.
+  /**
+   Synchronizes the story name shown with the model.
 
-	 @method syncStoryName
-	**/
+   @method syncStoryName
+  **/
 
-	syncStoryName: function()
-	{
-		this.$('.storyNameVal').text(this.parent.model.get('name'));
-	},
+  syncStoryName: function()
+  {
+    this.$('.storyNameVal').text(this.parent.model.get('name'));
+  },
 
-	/**
-	 Synchronizes the selected state of the zoom buttons with the model.
+  /**
+   Synchronizes the selected state of the zoom buttons with the model.
 
-	 @method syncZoomButtons
-	**/
+   @method syncZoomButtons
+  **/
 
-	syncZoomButtons: function()
-	{
-		var zoom = this.parent.model.get('zoom');
+  syncZoomButtons: function()
+  {
+    var zoom = this.parent.model.get('zoom');
 
-		// find the correct zoom description
+    // find the correct zoom description
 
-		for (var desc in this.parent.ZOOM_MAPPINGS)
-			if (this.parent.ZOOM_MAPPINGS[desc] == zoom)
-				var className = 'zoom' + desc[0].toUpperCase() + desc.substr(1);
+    for (var desc in this.parent.ZOOM_MAPPINGS)
+      if (this.parent.ZOOM_MAPPINGS[desc] == zoom)
+        var className = 'zoom' + desc[0].toUpperCase() + desc.substr(1);
 
-		// set toolbar active states accordingly
+    // set toolbar active states accordingly
 
-		this.$('.zooms button').each(function()
-		{
-			var $t = $(this);
+    this.$('.zooms button').each(function()
+    {
+      var $t = $(this);
 
-			if ($t.hasClass(className))
-				$t.addClass('active');
-			else
-				$t.removeClass('active');
-		});
-	},
+      if ($t.hasClass(className))
+        $t.addClass('active');
+      else
+        $t.removeClass('active');
+    });
+  },
 
-	/**
-	 Synchronizes the checked state of the Snap to Grid menu item with the model.
+  /**
+   Synchronizes the checked state of the Snap to Grid menu item with the model.
 
-	 @method syncSnapToGrid
-	**/
+   @method syncSnapToGrid
+  **/
 
-	syncSnapToGrid: function()
-	{
-		var menu = this.$('.snapToGrid').closest('li');
+  syncSnapToGrid: function()
+  {
+    var menu = this.$('.snapToGrid').closest('li');
 
-		if (this.parent.model.get('snapToGrid'))
-			menu.addClass('checked');
-		else
-			menu.removeClass('checked');
-	},
+    if (this.parent.model.get('snapToGrid'))
+      menu.addClass('checked');
+    else
+      menu.removeClass('checked');
+  },
 
-	events:
-	{
-		'click .editScript': function (e)
-		{
-			this.parent.scriptEditor.open();
-		},
+  events:
+  {
+    'click .editScript': function (e)
+    {
+      this.parent.scriptEditor.open();
+    },
 
-		'click .editStyle': function (e)
-		{
-			this.parent.styleEditor.open();
-		},
+    'click .editStyle': function (e)
+    {
+      this.parent.styleEditor.open();
+    },
 
-		'click .renameStory': function (e)
-		{
-			this.parent.renameModal.open();
-		},
+    'click .renameStory': function (e)
+    {
+      this.parent.renameModal.open();
+    },
 
-		'click .addPassage': function (e)
-		{
-			this.parent.addPassage();
-		},
+    'click .addPassage': function (e)
+    {
+      this.parent.addPassage();
+    },
 
-		'click .testStory': function (e)
-		{
-			this.parent.test();
-		},
+    'click #addPassageDS': function (e)
+    {
+      this.parent.addPassageDS();
+    },
 
-		'click .playStory': function (e)
-		{
-			this.parent.play();
-		},
+    'click #addStoryConfig': function (e) {
+      this.parent.addStoryConfig();
+    },
 
-		'click .proofStory': function (e)
-		{
-			this.parent.proof();
-		},
+    'click #addPassageEndLevel': function (e) {
+      this.parent.addPassageEndLevel();
+    },
 
-		'click .publishStory': function (e)
-		{
-			this.parent.publish();
-		},
+    'click #addPassageEndGameGroup': function (e) {
+      this.parent.addPassageEndGameGroup();
+    },
 
-		'click .storyProperties': function (e)
-		{
-			this.parent.properties.open();
-		},
+    'click #addPassageEndGameIndividualSS': function (e) {
+      this.parent.addPassageEndGameIndividualSS();
+    },
 
-		'click .changeFormat': function (e)
-		{
-			this.parent.storyFormatModal.open();
-		},
+    'click #addPassageEndGameIndividualBT': function (e) {
+      this.parent.addPassageEndGameIndividualBT();
+    },
 
-		'click .zoomBig, .zoomMedium, .zoomSmall': function (e)
-		{
-			var desc = $(e.target).closest('button').attr('class');
-			desc = desc.replace(/^zoom/, '').replace(/ .*/, '').toLowerCase();
-			this.parent.model.save({ zoom: this.parent.ZOOM_MAPPINGS[desc] }); 
-		},
+    'click .testStory': function (e)
+    {
+      this.parent.test();
+    },
 
-		'click .snapToGrid': function()
-		{
-			this.parent.model.save({ snapToGrid: ! this.parent.model.get('snapToGrid') });
-		},
+    'click .playStory': function (e)
+    {
+      this.parent.play();
+    },
 
-		'bubbleshow .storyBubble': 'syncSnapToGrid'
-	}
+    'click .proofStory': function (e)
+    {
+      this.parent.proof();
+    },
+
+    'click .publishStory': function (e)
+    {
+      this.parent.publish();
+    },
+
+    'click .storyProperties': function (e)
+    {
+      this.parent.properties.open();
+    },
+
+    'click .changeFormat': function (e)
+    {
+      this.parent.storyFormatModal.open();
+    },
+
+    'click .zoomBig, .zoomMedium, .zoomSmall': function (e)
+    {
+      var desc = $(e.target).closest('button').attr('class');
+      desc = desc.replace(/^zoom/, '').replace(/ .*/, '').toLowerCase();
+      this.parent.model.save({ zoom: this.parent.ZOOM_MAPPINGS[desc] }); 
+    },
+
+    'click .snapToGrid': function()
+    {
+      this.parent.model.save({ snapToGrid: ! this.parent.model.get('snapToGrid') });
+    },
+
+    'bubbleshow .storyBubble': 'syncSnapToGrid'
+  }
 });

@@ -82,9 +82,51 @@
 <i class="fa fa-play fa-lg"></i> Play
 </button>
 
-<button class="addPassage create" title="Add a new passage" data-tooltip-dir="nw">
-<i class="fa fa-plus fa-lg"></i> Passage
-</button>
+<div class="bubbleContainer inline">
+  <button class="subtle" data-bubble="toggle">
+    <span>Add Node</span>
+    <i class="fa fa-caret-up fa-lg"></i>
+  </button>
+  <div class="bubble down smaller">
+    <ul class="menu">
+      <li>
+        <button class="addPassage create" title="Add Twine passage" data-tooltip-dir="nw">
+          <i class="fa fa-plus fa-lg"></i> Twine Passage
+        </button>
+      </li>
+      <li>
+        <button id="addPassageDS" class="create" title="Add new DS passage" data-tooltip-dir="nw">
+          <i class="fa fa-plus fa-lg"></i> DS Passage
+        </button>
+      </li>
+      <li>
+        <button id="addStoryConfig" class="create" title="Add a story config" data-tooltip-dir="nw">
+          <i class="fa fa-plus fa-lg"></i> Story Config
+        </button>
+      </li>
+      <li>
+        <button id="addPassageEndLevel" class="create" title="Add new end level passage" data-tooltip-dir="nw">
+          <i class="fa fa-plus fa-lg"></i> End Level
+        </button>
+      </li>
+      <li>
+        <button id="addPassageEndGameGroup" class="create" title="Add new end game group passage" data-tooltip-dir="nw">
+          <i class="fa fa-plus fa-lg"></i> End Game (Group)
+        </button>
+      </li>
+      <li>
+        <button id="addPassageEndGameIndividualSS" class="create" title="Add new end game individual passage (Science Sleuth)" data-tooltip-dir="nw">
+          <i class="fa fa-plus fa-lg"></i> End Game (Indiv - SS)
+        </button>
+      </li>
+      <li>
+        <button id="addPassageEndGameIndividualBT" class="create" title="Add new end game individual passage (Bully Test)" data-tooltip-dir="nw">
+          <i class="fa fa-plus fa-lg"></i> End Game (Indiv - BT)
+        </button>
+      </li>
+    </ul>
+  </div> <!-- .bubble -->
+</div> <!-- .bubbleContainer -->
 
 </div> <!-- .right -->
 </div> <!-- .toolbar -->
