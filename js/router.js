@@ -16,72 +16,72 @@
 
 var TwineRouter = Backbone.Router.extend(
 {
-	routes:
-	{
-		'welcome': function()
-		{
-			window.app.mainRegion.show(new WelcomeView());
-		},
+  routes:
+  {
+    'welcome': function()
+    {
+      window.app.mainRegion.show(new WelcomeView());
+    },
 
-		'stories': function()
-		{
-			// list of all stories
+    'stories': function()
+    {
+      // list of all stories
 
-			window.app.mainRegion.show(new StoryListView({ collection: StoryCollection.all() }));
-		},
+      window.app.mainRegion.show(new StoryListView({ collection: StoryCollection.all() }));
+    },
 
-		'stories/:id': function (id)
-		{
-			// edit a specific story
+    'stories/:id': function (id)
+    {
+      // edit a specific story
 
-			window.app.mainRegion.show(new StoryEditView({ model: Story.withId(id) }));
-		},
+      window.app.mainRegion.show(new StoryEditView({ model: Story.withId(id) }));
+    },
 
-		'stories/:id/play': function (id)
-		{
-			// play a story
+    'stories/:id/play': function (id)
+    {
+      // play a story
 
-			window.app.publishStory(Story.withId(id));
-		},
+      window.app.publishStory(Story.withId(id));
+    },
 
-		'stories/:id/test': function (id)
-		{
-			// test a story from the beginning
+    'stories/:id/test': function (id)
+    {
+      // test a story from the beginning
 
-			window.app.publishStory(Story.withId(id), null, { formatOptions: ['debug'] });
-		},
+      window.app.publishStory(Story.withId(id), null, { formatOptions: ['debug'] });
+    },
 
-		'stories/:storyId/test/:passageId': function (storyId, passageId)
-		{
-			// test a story from a particular passage
-			
-			window.app.publishStory(Story.withId(storyId), null,
-			{
-				formatOptions: ['debug'],
-				startPassageId: passageId
-			});
-		},
+    'stories/:storyId/test/:passageId': function (storyId, passageId)
+    {
+      // test a story from a particular passage
+      
+      window.app.publishStory(Story.withId(storyId), null,
+      {
+        formatOptions: ['debug'],
+        startPassageId: passageId
+      });
+    },
 
-		'stories/:id/proof': function (id)
-		{
-			// proof a story
+    'stories/:id/proof': function (id)
+    {
+      // proof a story
 
-			var story = Story.withId(id);
-			var format = StoryFormat.withName(AppPref.withName('proofingFormat').get('value'));
-			
-			window.app.publishStory(story, null, { format: format });
-		},
+      var story = Story.withId(id);
+      var format = StoryFormat.withName(AppPref.withName('proofingFormat').get('value'));
+      
+      window.app.publishStory(story, null, { format: format });
+    },
 
-		'*path': function()
-		{
-			// default route -- show welcome if the user hasn't already seen it
+    '*path': function()
+    {
+      // default route -- show welcome if the user hasn't already seen it
 
-			var welcomePref = AppPref.withName('welcomeSeen', false);
+      var welcomePref = AppPref.withName('welcomeSeen', false);
 
-			if (welcomePref.get('value') === true)
-				window.location.hash = '#stories';
-			else
-				window.location.hash = '#welcome';
-		}
-	}
+      if (welcomePref.get('value') === true)
+        window.location.hash = '#stories';
+      else
+        window.location.hash = '#welcome';
+    }
+  }
 });

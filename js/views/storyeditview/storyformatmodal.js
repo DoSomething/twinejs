@@ -2,106 +2,106 @@
 
 StoryEditView.StoryFormatModal = Backbone.View.extend(
 {
-	initialize: function (options)
-	{
-		this.parent = options.parent;
-		this.itemTemplate = _.template($('.singleStoryFormatItem').html());
-	},
+  initialize: function (options)
+  {
+    this.parent = options.parent;
+    this.itemTemplate = _.template($('.singleStoryFormatItem').html());
+  },
 
-	/**
-	 Opens a modal dialog for changing story formats.
+  /**
+   Opens a modal dialog for changing story formats.
 
-	 @method open
-	**/
+   @method open
+  **/
 
-	open: function()
-	{
-		// begin loading formats immediately
+  open: function()
+  {
+    // begin loading formats immediately
 
-		this.$('.formats').empty();
-		this.formatsToLoad = StoryFormatCollection.all();
-		this.loadNextFormat();
+    this.$('.formats').empty();
+    this.formatsToLoad = StoryFormatCollection.all();
+    this.loadNextFormat();
 
-		this.$el.data('modal').trigger('show');
-	},
+    this.$el.data('modal').trigger('show');
+  },
 
-	/**
-	 Closes the modal dialog for changing story formats.
+  /**
+   Closes the modal dialog for changing story formats.
 
-	 @method close
-	**/
+   @method close
+  **/
 
-	close: function()
-	{
-		this.$el.data('modal').trigger('hide');
-	},
+  close: function()
+  {
+    this.$el.data('modal').trigger('hide');
+  },
 
-	/**
-	 Changes the story's format.
+  /**
+   Changes the story's format.
 
-	 @method changeFormat
-	**/
+   @method changeFormat
+  **/
 
-	changeFormat: function (name)
-	{
-		this.parent.model.save({ storyFormat: name });
-		this.$('.detail button.select').each(function()
-		{
-			var $t = $(this);
+  changeFormat: function (name)
+  {
+    this.parent.model.save({ storyFormat: name });
+    this.$('.detail button.select').each(function()
+    {
+      var $t = $(this);
 
-			if ($t.closest('.detail').data('format') == name)
-				$t.addClass('active');
-			else
-				$t.removeClass('active');
-		});
-	},
+      if ($t.closest('.detail').data('format') == name)
+        $t.addClass('active');
+      else
+        $t.removeClass('active');
+    });
+  },
 
-	/**
-	 Incrementally loads information about each story format.
- 	 If there are more remaining to be loaded, then this calls itself
-	 once the load is complete.
+  /**
+   Incrementally loads information about each story format.
+   If there are more remaining to be loaded, then this calls itself
+   once the load is complete.
 
-	 @method loadNextFormat
-	**/
+   @method loadNextFormat
+  **/
 
-	loadNextFormat: function()
-	{
-		if (this.formatsToLoad.length > 0)
-		{
-			var format = this.formatsToLoad.at(0);
+  loadNextFormat: function()
+  {
+    if (this.formatsToLoad.length > 0)
+    {
+      var format = this.formatsToLoad.at(0);
 
-			format.load(_.bind(function()
-			{
-				// skip proofing-only formats
+      format.load(_.bind(function()
+      {
+        // skip proofing-only formats
 
-				if (! format.properties.proofing)
-				{
-					// calculate containing directory for the format
-					// so that image URLs, for example, are correct
+        if (! format.properties.proofing)
+        {
+          // calculate containing directory for the format
+          // so that image URLs, for example, are correct
 
-					var path = format.get('url').replace(/\/[^\/]*?$/, '');
-					var fullContent = _.extend(format.properties, { path: path });
-					var content = $(this.itemTemplate(fullContent));
+          var path = format.get('url').replace(/\/[^\/]*?$/, '');
+          var fullContent = _.extend(format.properties, { path: path });
+          var content = $(this.itemTemplate(fullContent));
 
-					this.$('.formats').append(content);
+          this.$('.formats').append(content);
 
-					if (fullContent.name == this.parent.model.get('storyFormat'))
-						content.find('button.select').addClass('active');
-				};
+          if (fullContent.name == this.parent.model.get('storyFormat'))
+            content.find('button.select').addClass('active');
+        };
 
-				this.formatsToLoad.remove(format);
-				this.loadNextFormat();
-			}, this));
-		}
-		else
-			this.$('.loading').hide();
-	},
+        this.formatsToLoad.remove(format);
+        this.loadNextFormat();
+      }, this));
+    }
+    else
+      this.$('.loading').hide();
+  },
 
-	events:
-	{
-		'click button.select': function (e)
-		{
-			this.changeFormat($(e.target).closest('button').data('format'));
-		}
-	}
+  events:
+  {
+    'click button.select': function (e)
+    {
+      this.changeFormat($(e.target).closest('button').data('format'));
+    }
+  }
 });

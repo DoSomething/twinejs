@@ -9,8 +9,8 @@
 
 var StoryFormatCollection = Backbone.Collection.extend(
 {
-	model: StoryFormat,
-	localStorage: new Backbone.LocalStorage('twine-storyformats')
+  model: StoryFormat,
+  localStorage: new Backbone.LocalStorage('twine-storyformats')
 });
 
 /**
@@ -23,7 +23,7 @@ var StoryFormatCollection = Backbone.Collection.extend(
 
 StoryFormatCollection.all = function()
 {
-	var result = new StoryFormatCollection();
-	result.fetch();
-	return result;
+  var result = new StoryFormatCollection();
+  result.fetch();
+  return result;
 };

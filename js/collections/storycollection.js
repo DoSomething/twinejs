@@ -9,33 +9,33 @@
 
 var StoryCollection = Backbone.Collection.extend(
 {
-	model: Story,
-	localStorage: new Backbone.LocalStorage('twine-stories'),
-	order: 'name',
-	reverseOrder: false,
+  model: Story,
+  localStorage: new Backbone.LocalStorage('twine-stories'),
+  order: 'name',
+  reverseOrder: false,
 
-	comparator: function (a, b)
-	{
-		var sortVal;
-		
-		switch (this.order)
-		{
-			case 'name':
-			sortVal = a.get('name') < b.get('name') ? -1 : 1;
-			break;
+  comparator: function (a, b)
+  {
+    var sortVal;
+    
+    switch (this.order)
+    {
+      case 'name':
+      sortVal = a.get('name') < b.get('name') ? -1 : 1;
+      break;
 
-			case 'lastUpdate':
-			var aDate = new Date(a.get('lastUpdate'));
-			var bDate = new Date(b.get('lastUpdate'));
-			sortVal = aDate.getTime() < bDate.getTime() ? -1 : 1;
-			break;
-			
-			default:
-			throw new Error("don't know how to sort stories by " + this.order);
-		};
+      case 'lastUpdate':
+      var aDate = new Date(a.get('lastUpdate'));
+      var bDate = new Date(b.get('lastUpdate'));
+      sortVal = aDate.getTime() < bDate.getTime() ? -1 : 1;
+      break;
+      
+      default:
+      throw new Error("don't know how to sort stories by " + this.order);
+    };
 
-		return sortVal *(this.reverseOrder ? -1 : 1);
-	}
+    return sortVal *(this.reverseOrder ? -1 : 1);
+  }
 });
 
 /**
@@ -48,7 +48,7 @@ var StoryCollection = Backbone.Collection.extend(
 
 StoryCollection.all = function()
 {
-	var result = new StoryCollection();
-	result.fetch();
-	return result;
+  var result = new StoryCollection();
+  result.fetch();
+  return result;
 };

@@ -10,11 +10,11 @@
 
 var AppPref = Backbone.Model.extend(
 {
-	defaults:
-	{
-		name: '',
-		value: null
-	}
+  defaults:
+  {
+    name: '',
+    value: null
+  }
 });
 
 /**
@@ -31,13 +31,13 @@ var AppPref = Backbone.Model.extend(
 
 AppPref.withName = function (name, defaultVal)
 {
-	var allPrefs = AppPrefCollection.all();
-	var result = allPrefs.findWhere({ name: name });
+  var allPrefs = AppPrefCollection.all();
+  var result = allPrefs.findWhere({ name: name });
 
-	if (result)
-		return result;
-	else if (defaultVal !== null)
-		return allPrefs.create({ name: name, value: defaultVal });
-	else
-		return;
+  if (result)
+    return result;
+  else if (defaultVal !== null)
+    return allPrefs.create({ name: name, value: defaultVal });
+  else
+    return;
 };

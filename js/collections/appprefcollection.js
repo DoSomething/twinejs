@@ -9,8 +9,8 @@
 
 var AppPrefCollection = Backbone.Collection.extend(
 {
-	model: AppPref,
-	localStorage: new Backbone.LocalStorage('twine-prefs')
+  model: AppPref,
+  localStorage: new Backbone.LocalStorage('twine-prefs')
 });
 
 /**
@@ -23,7 +23,7 @@ var AppPrefCollection = Backbone.Collection.extend(
 
 AppPrefCollection.all = function()
 {
-	var result = new AppPrefCollection();
-	result.fetch();
-	return result;
+  var result = new AppPrefCollection();
+  result.fetch();
+  return result;
 };
