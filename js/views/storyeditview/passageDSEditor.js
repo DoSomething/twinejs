@@ -7,6 +7,14 @@ StoryEditView.PassageDSEditor = Backbone.View.extend({
    */
   open: function() {
     this.$el.data('modal').trigger('show');
+  },
+
+  /**
+   * Closes modal.
+   */
+  close: function()
+  {
+    this.$el.data('modal').trigger('hide');
   }
 
 });
