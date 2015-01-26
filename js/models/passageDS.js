@@ -2,7 +2,7 @@
 
 var PassageDS = Passage.extend({
   defaults: {
-
+    type: 'ds'
   },
 
   template: _.template(''),

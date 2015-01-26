@@ -2,7 +2,7 @@
 
 var PassageEndGameIndividualSS = Passage.extend({
   defaults: {
-
+    type: 'endGameIndividualSS'
   },
 
   template: _.template(''),

@@ -162,6 +162,14 @@ var StoryEditView = Marionette.CompositeView.extend(
     this.renameModal = new StoryEditView.RenameStoryModal({ el: this.$('#renameStoryModal'), parent: this });
     this.storyFormatModal = new StoryEditView.StoryFormatModal({ el: this.$('#storyFormatModal'), parent: this });
 
+    // Editors for custom DS passages
+    this.passageDSEditor = new StoryEditView.PassageDSEditor({ el: this.$('#passageDSModal'), parent: this });
+    this.passageEndGameGroupEditor = new StoryEditView.PassageEndGameGroupEditor({ el: this.$('#passageEndGameGroupModal'), parent: this });
+    this.passageEndGameIndividualBTEditor = new StoryEditView.PassageEndGameIndividualBTEditor({ el: this.$('#passageEndGameIndividualBTModal'), parent: this });
+    this.passageEndGameIndividualSSEditor = new StoryEditView.PassageEndGameIndividualSSEditor({ el: this.$('#passageEndGameIndividualSSModal'), parent: this });
+    this.passageEndLevelEditor = new StoryEditView.PassageEndLevelEditor({ el: this.$('#passageEndLevelModal'), parent: this });
+    this.passageStoryConfigEditor = new StoryEditView.PassageStoryConfigEditor({ el: this.$('#passageStoryConfigModal'), parent: this });
+
     if (! window.app.hasPrimaryTouchUI())
       this.marquee = new StoryEditView.Marquee({ el: this.$('.passages'), parent: this });
 

@@ -2,7 +2,7 @@
 
 var PassageStoryConfig = Passage.extend({
   defaults: {
-
+    type: 'storyConfig'
   },
 
   template: _.template(''),

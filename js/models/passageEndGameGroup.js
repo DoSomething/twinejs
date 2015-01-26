@@ -2,7 +2,7 @@
 
 var PassageEndGameGroup = Passage.extend({
   defaults: {
-
+    type: 'endGameGroup'
   },
 
   template: _.template(''),

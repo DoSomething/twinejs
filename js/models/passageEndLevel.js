@@ -2,7 +2,7 @@
 
 var PassageEndLevel = Passage.extend({
   defaults: {
-
+    type: 'endLevel'
   },
 
   template: _.template(''),
