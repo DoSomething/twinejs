@@ -67,6 +67,10 @@ StoryEditView.PassageStoryConfigEditor = Backbone.View.extend({
     else {
       // @todo show error message here
     }
+
+    if (e) {
+      e.stopImmediatePropagation();
+    }
   }
 
 });

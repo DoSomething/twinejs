@@ -31,6 +31,7 @@ var PassageStoryConfig = Passage.extend({
 
   template: _.template('<tw-passagedata pid="<%- id %>" ' +
     'name="<%- name %>" position="<%- left %>,<%- top %>" ' +
+    'type="<%- type %>" ' +
     'description="<%- description %>" ' +
     'alpha_wait_oip="<%- alpha_wait_oip %>" ' +
     'alpha_start_ask_oip="<%- alpha_start_ask_oip %>" ' +
