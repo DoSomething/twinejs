@@ -9,67 +9,67 @@
 
 StoryEditView.ScriptEditor = Backbone.View.extend(
 {
-	initialize: function (options)
-	{
-		this.parent = options.parent;
+  initialize: function (options)
+  {
+    this.parent = options.parent;
 
-		// we have to use the [0] index here because CodeMirror
-		// expects a DOM element, not a jQuery object
+    // we have to use the [0] index here because CodeMirror
+    // expects a DOM element, not a jQuery object
 
-		this.scriptEditor = CodeMirror.fromTextArea(this.$('.scriptSource')[0],
-		{
-			lineWrapping: true,
-			lineNumbers: false,
-			tabSize: 2,
-			indentWithTabs: true,
-			mode: 'javascript'
-		});
-		this.$('.scriptSource:first').data('codemirror', this.scriptEditor);
+    this.scriptEditor = CodeMirror.fromTextArea(this.$('.scriptSource')[0],
+    {
+      lineWrapping: true,
+      lineNumbers: false,
+      tabSize: 2,
+      indentWithTabs: true,
+      mode: 'javascript'
+    });
+    this.$('.scriptSource:first').data('codemirror', this.scriptEditor);
 
-		this.$el.on({
-			'modalshown': _.bind(function()
-			{
-				this.scriptEditor.refresh();
-				this.scriptEditor.focus();
-			}, this),
-			'modalhide': _.bind(function()
-			{
-				this.save();
-			}, this)
-		});
-	},
+    this.$el.on({
+      'modalshown': _.bind(function()
+      {
+        this.scriptEditor.refresh();
+        this.scriptEditor.focus();
+      }, this),
+      'modalhide': _.bind(function()
+      {
+        this.save();
+      }, this)
+    });
+  },
 
-	/**
-	 Opens a modal dialog for editing the story's script.
+  /**
+   Opens a modal dialog for editing the story's script.
 
-	 @method open
-	**/
+   @method open
+  **/
 
-	open: function()
-	{
-		this.scriptEditor.doc.setValue(this.parent.model.get('script'));
-		this.$el.data('modal').trigger('show');
-	},
+  open: function()
+  {
+    this.scriptEditor.doc.setValue(this.parent.model.get('script'));
+    this.$el.data('modal').trigger('show');
+  },
 
-	/**
-	 Closes the modal dialog.
+  /**
+   Closes the modal dialog.
 
-	 @method close
-	**/
+   @method close
+  **/
 
-	close: function()
-	{
-		this.$el.data('modal').trigger('hide');
-	},
+  close: function()
+  {
+    this.$el.data('modal').trigger('hide');
+  },
 
-	/**
-	 Saves changes to the model.
+  /**
+   Saves changes to the model.
 
-	 @method save
-	**/
+   @method save
+  **/
 
-	save: function()
-	{
-		this.parent.model.save({ script: this.scriptEditor.doc.getValue() });
-	}
+  save: function()
+  {
+    this.parent.model.save({ script: this.scriptEditor.doc.getValue() });
+  }
 });

@@ -9,67 +9,67 @@
 
 StoryEditView.StyleEditor = Backbone.View.extend(
 {
-	initialize: function (options)
-	{
-		this.parent = options.parent;
+  initialize: function (options)
+  {
+    this.parent = options.parent;
 
-		// we have to use the [0] index here because CodeMirror
-		// expects a DOM element, not a jQuery object
+    // we have to use the [0] index here because CodeMirror
+    // expects a DOM element, not a jQuery object
 
-		this.styleEditor = CodeMirror.fromTextArea(this.$('.stylesheetSource')[0],
-		{
-			lineWrapping: true,
-			lineNumbers: false,
-			tabSize: 2,
-			indentWithTabs: true,
-			mode: 'css'
-		});
-		this.$('.stylesheetSource:first').data('codemirror', this.styleEditor);
+    this.styleEditor = CodeMirror.fromTextArea(this.$('.stylesheetSource')[0],
+    {
+      lineWrapping: true,
+      lineNumbers: false,
+      tabSize: 2,
+      indentWithTabs: true,
+      mode: 'css'
+    });
+    this.$('.stylesheetSource:first').data('codemirror', this.styleEditor);
 
-		this.$el.on({
-			'modalshown': _.bind(function()
-			{
-				this.styleEditor.refresh();
-				this.styleEditor.focus();
-			}, this),
-			'modalhide': _.bind(function()
-			{
-				this.save();
-			}, this)
-		});
-	},
+    this.$el.on({
+      'modalshown': _.bind(function()
+      {
+        this.styleEditor.refresh();
+        this.styleEditor.focus();
+      }, this),
+      'modalhide': _.bind(function()
+      {
+        this.save();
+      }, this)
+    });
+  },
 
-	/**
-	 Opens a modal dialog for editing the story's stylesheet.
+  /**
+   Opens a modal dialog for editing the story's stylesheet.
 
-	 @method open
-	**/
+   @method open
+  **/
 
-	open: function()
-	{
-		this.styleEditor.doc.setValue(this.parent.model.get('stylesheet'));
-		this.$el.data('modal').trigger('show');
-	},
+  open: function()
+  {
+    this.styleEditor.doc.setValue(this.parent.model.get('stylesheet'));
+    this.$el.data('modal').trigger('show');
+  },
 
-	/**
-	 Closes the modal dialog.
+  /**
+   Closes the modal dialog.
 
-	 @method close
-	**/
+   @method close
+  **/
 
-	close: function()
-	{
-		this.$el.data('modal').trigger('hide');
-	},
+  close: function()
+  {
+    this.$el.data('modal').trigger('hide');
+  },
 
-	/**
-	 Saves changes to the model.
+  /**
+   Saves changes to the model.
 
-	 @method save
-	**/
+   @method save
+  **/
 
-	save: function()
-	{
-		this.parent.model.save({ stylesheet: this.styleEditor.doc.getValue() });
-	}
+  save: function()
+  {
+    this.parent.model.save({ stylesheet: this.styleEditor.doc.getValue() });
+  }
 });

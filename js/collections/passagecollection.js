@@ -9,8 +9,8 @@
 
 var PassageCollection = Backbone.Collection.extend(
 {
-	model: Passage,
-	localStorage: new Backbone.LocalStorage('twine-passages')
+  model: Passage,
+  localStorage: new Backbone.LocalStorage('twine-passages')
 });
 
 /**
@@ -23,7 +23,7 @@ var PassageCollection = Backbone.Collection.extend(
 
 PassageCollection.all = function()
 {
-	var result = new PassageCollection();
-	result.fetch();
-	return result;
+  var result = new PassageCollection();
+  result.fetch();
+  return result;
 };

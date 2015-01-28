@@ -10,53 +10,53 @@
 
 var WelcomeView = Backbone.Marionette.ItemView.extend(
 {
-	template: '#templates .welcomeView',
+  template: '#templates .welcomeView',
 
-	initialize: function()
-	{
-		this.welcomePref = AppPref.withName('welcomeSeen');
-	},
+  initialize: function()
+  {
+    this.welcomePref = AppPref.withName('welcomeSeen');
+  },
 
-	finish: function()
-	{
-		if (! this.welcomePref)
-		{
-			this.welcomePref = new AppPref({ name: 'welcomeSeen' });
-			AppPrefCollection.all().add(this.welcomePref);
-		};
+  finish: function()
+  {
+    if (! this.welcomePref)
+    {
+      this.welcomePref = new AppPref({ name: 'welcomeSeen' });
+      AppPrefCollection.all().add(this.welcomePref);
+    };
 
-		this.welcomePref.save({ value: true });
-		window.location.hash = '#stories';
-	},
+    this.welcomePref.save({ value: true });
+    window.location.hash = '#stories';
+  },
 
-	onRender: function()
-	{
-		this.$('div:first-child').css('display', 'block').addClass('appear');
+  onRender: function()
+  {
+    this.$('div:first-child').css('display', 'block').addClass('appear');
 
-		this.$el.on('click', 'button, a.done', _.bind(function (e)
-		{
-			var $t = $(e.target);
-			var next = $t.closest('div').next('div');
+    this.$el.on('click', 'button, a.done', _.bind(function (e)
+    {
+      var $t = $(e.target);
+      var next = $t.closest('div').next('div');
 
-			// fade out existing buttons
+      // fade out existing buttons
 
-			$t.closest('p').addClass('fadeOut')
-			.on('animationend webkitAnimationEnd MSAnimationEnd', function ()
-			{
-				$(this).remove();
-			});
+      $t.closest('p').addClass('fadeOut')
+      .on('animationend webkitAnimationEnd MSAnimationEnd', function ()
+      {
+        $(this).remove();
+      });
 
-			// either show the next div, or move on to the story list
-			// have to offset the position because we're animating it
-			// downward, I think
+      // either show the next div, or move on to the story list
+      // have to offset the position because we're animating it
+      // downward, I think
 
-			if ($t.hasClass('done'))
-				this.finish();
-			else
-			{
-				next.css('display', 'block').addClass('slideDown');
-				$('body').animate({ scrollTop: next.position().top + 100 });
-			};
-		}, this));
-	}
+      if ($t.hasClass('done'))
+        this.finish();
+      else
+      {
+        next.css('display', 'block').addClass('slideDown');
+        $('body').animate({ scrollTop: next.position().top + 100 });
+      };
+    }, this));
+  }
 });
