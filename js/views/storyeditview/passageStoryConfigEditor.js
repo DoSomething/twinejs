@@ -3,7 +3,7 @@
 StoryEditView.PassageStoryConfigEditor = Backbone.View.extend({
 
   initialize: function() {
-    // Save when modal's is closed
+    // Save when modal is closed
     this.$el.on('modalhide', _.bind(this.save, this));
   },
 

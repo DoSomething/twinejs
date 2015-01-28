@@ -47,7 +47,7 @@ var PassageStoryConfig = Passage.extend({
     '></tw-passagedata>'),
 
   initialize: function() {
-    console.log('PassageStoryConfig.initialize()');
+    Passage.prototype.initialize.apply(this);
   },
 
   validate: function(attrs) {
@@ -67,6 +67,7 @@ var PassageStoryConfig = Passage.extend({
       name: this.get('name'),
       left: this.get('left'),
       top: this.get('top'),
+      type: this.get('type'),
       description: this.get('description'),
       alpha_wait_oip: this.get('alpha_wait_oip'),
       alpha_start_ask_oip: this.get('alpha_start_ask_oip'),

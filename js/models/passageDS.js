@@ -5,7 +5,7 @@ var PassageDS = Passage.extend({
     type: 'ds',
     top: 0,
     left: 0,
-    name: 'Untitle DS Passage',
+    name: 'Untitled DS Passage',
     text: ''
   },
 
@@ -15,7 +15,7 @@ var PassageDS = Passage.extend({
              '<%- text %></tw-passagedata>'),
 
   initialize: function() {
-    console.log('PassageDS.initialize()');
+    Passage.prototype.initialize.apply(this);
   },
 
   validate: function(attrs) {
