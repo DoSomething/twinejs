@@ -130,6 +130,11 @@ StoryEditView.Toolbar = Backbone.View.extend(
       this.parent.play();
     },
 
+    'click .exportStoryForSms': function (e)
+    {
+      this.parent.exportForSms();
+    },
+
     'click .proofStory': function (e)
     {
       this.parent.proof();
