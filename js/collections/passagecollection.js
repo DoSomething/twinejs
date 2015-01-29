@@ -9,7 +9,21 @@
 
 var PassageCollection = Backbone.Collection.extend(
 {
-  model: Passage,
+  /**
+   * Collection contains polymorphic models.
+   */
+  model: function(attrs, options) {
+    if (attrs.type === PassageStoryConfig.prototype.defaults.type) {
+      return new PassageStoryConfig(attrs, options);
+    }
+    else if (attrs.type === PassageDS.prototype.defaults.type) {
+      return new PassageDS(attrs, options);
+    }
+    else {
+      return new Passage(attrs, options);
+    }
+  },
+
   localStorage: new Backbone.LocalStorage('twine-passages')
 });
 
