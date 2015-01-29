@@ -4,12 +4,52 @@
   </button>
 
   <p class="title">
-    <input type="text" class="passageName fillin" placeholder="Passage Name">
+    <input type="text" class="passageName block fillin" value="Story Configuration" disabled>
   </p>
 
   <div class="content">
-    <p>
-      Placeholder: passageStoryConfigModal
-    </p>
+    <label for="edit-sc-description">Description</label>
+    <input type="text" id="edit-sc-description" class="block fillin">
+
+    <h3>Start Game Opt-in Paths</h3>
+
+    <label for="edit-sc-alpha-wait-oip">Alpha Wait OIP</label>
+    <input type="number" id="edit-sc-alpha-wait-oip" name="sc-alpha-wait-oip" class="block fillin">
+
+    <label for="edit-sc-alpha-start-ask-oip">Alpha Start Ask OIP</label>
+    <input type="number" id="edit-sc-alpha-start-ask-oip" name="sc-alpha-start-ask-oip" class="block fillin">
+
+    <label for="edit-sc-beta-wait-oip">Beta Wait OIP</label>
+    <input type="number" id="edit-sc-beta-wait-oip" name="sc-beta-wait-oip" class="block fillin">
+
+    <label for="edit-sc-beta-join-ask-oip">Beta Join Ask OIP</label>
+    <input type="number" id="edit-sc-beta-join-ask-oip" name="sc-beta-join-ask-oip" class="block fillin">
+
+    <h3>Ask if player wants to go solo</h3>
+
+    <label for="edit-sc-ask-solo-play">Ask Solo Play OIP</label>
+    <input type="number" id="edit-sc-ask-solo-play" name="sc-ask-solo-play" class="block fillin">
+
+    <h3>Error Messages</h3>
+    <label for="edit-sc-game-in-progress-oip">Game In Progress OIP</label>
+    <input type="number" id="edit-sc-game-in-progress-oip" name="sc-game-in-progress-oip" class="block fillin">
+
+    <label for="edit-sc-game-ended-from-exit-oip">Game Ended From Exit OIP</label>
+    <input type="number" id="edit-sc-game-ended-from-exit-oip" name="sc-game-ended-from-exit-oip" class="block fillin">
+
+    <h3>Mobile Creation Opt-in Paths</h3>
+
+    <label for="edit-sc-ask-beta-1-oip">Ask Beta 1</label>
+    <input type="number" id="edit-sc-ask-beta-1-oip" name="sc-ask-beta-1-oip" class="block fillin">
+
+    <label for="edit-sc-ask-beta-2-oip">Ask Beta 2</label>
+    <input type="number" id="edit-sc-ask-beta-2-oip" name="sc-ask-beta-2-oip" class="block fillin">
+
+    <label for="edit-sc-invalid-mobile-oip">Invalid Mobile</label>
+    <input type="number" id="edit-sc-invalid-mobile-oip" name="sc-invalid-mobile-oip" class="block fillin">
+
+    <label for="edit-sc-not-enough-players-oip">Not Enough Players</label>
+    <input type="number" id="edit-sc-not-enough-players-oip" name="sc-not-enough-players-oip" class="block fillin">
+
   </div>
 </div>
