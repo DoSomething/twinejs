@@ -132,6 +132,19 @@ var TwineApp = Backbone.Marionette.Application.extend(
   },
 
   /**
+   * Exports a JSON configuration for DoSomething.org SMS games.
+   *
+   * @param story Story model to export
+   */
+  exportSmsGame: function (story) {
+    var name = story.get('name');
+    var data = story.publish(null, null);
+    
+    var formatted = exportsms.format(data);
+    $('body').html(JSON.stringify(formatted));
+  },
+
+  /**
    Saves an archive of all stories to a file to be downloaded.
 
    @method saveArchive

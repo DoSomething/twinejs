@@ -29,7 +29,7 @@ var PassageStoryConfig = Passage.extend({
     },
   },
 
-  template: _.template('<tw-passagedata pid="<%- id %>" ' +
+  template: _.template('<tw-passageStoryConfigData pid="<%- id %>" ' +
     'name="<%- name %>" position="<%- left %>,<%- top %>" ' +
     'type="<%- type %>" ' +
     'description="<%- description %>" ' +
@@ -44,7 +44,7 @@ var PassageStoryConfig = Passage.extend({
     'mc_ask_beta_2_oip="<%- mc_ask_beta_2_oip %>" ' +
     'mc_invalid_mobile_oip="<%- mc_invalid_mobile_oip %>" ' +
     'mc_not_enough_players_oip="<%- mc_not_enough_players_oip %>" ' +
-    '></tw-passagedata>'),
+    '></tw-passageStoryConfigData>'),
 
   initialize: function() {
     Passage.prototype.initialize.apply(this);

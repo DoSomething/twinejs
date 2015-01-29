@@ -72,6 +72,13 @@ var TwineRouter = Backbone.Router.extend(
       window.app.publishStory(story, null, { format: format });
     },
 
+    'stories/:id/smsGame': function (id)
+    {
+      var story = Story.withId(id);
+
+      window.app.exportSmsGame(story);
+    },
+
     '*path': function()
     {
       // default route -- show welcome if the user hasn't already seen it
