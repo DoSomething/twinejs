@@ -167,17 +167,17 @@ var PassageItemView = Marionette.ItemView.extend(
       this.parentView.passageDSEditor.model = this.model;
       this.parentView.passageDSEditor.open();
     }
-    else if (type == 'endGameGroup') {
-      this.parentView.passageEndGameGroupEditor.model = this.model;
-      this.parentView.passageEndGameGroupEditor.open();
+    else if (type == 'passageEndGameGroupSuccessNumberResult') {
+      this.parentView.passageEndGameGroupSuccessNumberResultEditor.model = this.model;
+      this.parentView.passageEndGameGroupSuccessNumberResultEditor.open();
     }
-    else if (type == 'endGameIndividualBT') {
-      this.parentView.passageEndGameIndividualBTEditor.model = this.model;
-      this.parentView.passageEndGameIndividualBTEditor.open();
+    else if (type == 'passageEndGameIndivSuperlativeResultEditor') {
+      this.parentView.passageEndGameIndivSuperlativeResultEditor.model = this.model;
+      this.parentView.passageEndGameIndivSuperlativeResultEditor.open();
     }
-    else if (type == 'endGameIndividualSS') {
-      this.parentView.passageEndGameIndividualSSEditor.model = this.model;
-      this.parentView.passageEndGameIndividualSSEditor.open();
+    else if (type == 'passageEndGameIndivRankResult') {
+      this.parentView.passageEndGameIndivRankResult.model = this.model;
+      this.parentView.passageEndGameIndivRankResult.open();
     }
     else if (type == 'endLevel') {
       this.parentView.passageEndLevelEditor.model = this.model;

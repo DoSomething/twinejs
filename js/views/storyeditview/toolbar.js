@@ -108,16 +108,16 @@ StoryEditView.Toolbar = Backbone.View.extend(
       this.parent.addPassageEndLevel();
     },
 
-    'click #addPassageEndGameGroup': function (e) {
-      this.parent.addPassageEndGameGroup();
+    'click #addPassageEndGameGroupSuccessNumberResult': function (e) {
+      this.parent.addPassageEndGameGroupSuccessNumberResult();
     },
 
-    'click #addPassageEndGameIndividualSS': function (e) {
-      this.parent.addPassageEndGameIndividualSS();
+    'click #addPassageEndGameIndivRankResult': function (e) {
+      this.parent.addPassageEndGameIndivRankResult();
     },
 
-    'click #addPassageEndGameIndividualBT': function (e) {
-      this.parent.addPassageEndGameIndividualBT();
+    'click #addPassageEndGameIndivSuperlativeResult': function (e) {
+      this.parent.addPassageEndGameIndivSuperlativeResult();
     },
 
     'click .testStory': function (e)
