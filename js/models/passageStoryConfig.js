@@ -50,6 +50,19 @@ var PassageStoryConfig = Passage.extend({
     Passage.prototype.initialize.apply(this);
   },
 
+  /**
+   * Returns an array of all links in this passage's text. Should just have a single link to the starting node
+   * of the story.
+   *
+   * @param {Boolean} internalOnly
+   *   Only return internal links? (i.e. not http://twinery.org)
+   * @return Array of string names
+   */
+  links: function(internalOnly) {
+    // @todo Assumes starting node will always be named 'L10'. Is this a poor assumption to make/thing to enforce?
+    return ['L10'];
+  },
+
   validate: function(attrs) {
 
   },
