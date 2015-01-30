@@ -192,20 +192,19 @@ StoryEditView.LinkManager = Backbone.View.extend(
     this.svg.clear();
     this.lineCache = {};
 
-    for (var startName in this.passageCache)
-    {
+    for (var startName in this.passageCache) {
       if (! this.passageCache.hasOwnProperty(startName))
         continue;
 
       var links = this.passageCache[startName].links;
-
-      for (var j = links.length - 1; j >= 0; j--)
-      {
-        var endName = links[j];
-        this.drawConnector(startName, endName, drawArrows);
-      };
-    };
-    },
+      if (links) {
+        for (var j = links.length - 1; j >= 0; j--) {
+          var endName = links[j];
+          this.drawConnector(startName, endName, drawArrows);
+        }
+      }
+    }
+  },
 
   /**
    Draws or updates a single connector from one passage to another.
@@ -382,13 +381,14 @@ StoryEditView.LinkManager = Backbone.View.extend(
     {
       var alwaysInclude = (draggedNames.indexOf(startName) != -1);
 
-      for (var i = props.links.length - 1; i >= 0; i--)
-      {
-        var endName = props.links[i];
+      if (props && props.links) {
+        for (var i = props.links.length - 1; i >= 0; i--) {
+          var endName = props.links[i];
 
-        if (alwaysInclude || draggedNames.indexOf(endName) != -1)
-          this.draggedConnectors.push([startName, endName]);  
-      };
+          if (alwaysInclude || draggedNames.indexOf(endName) != -1)
+            this.draggedConnectors.push([startName, endName]);  
+        }
+      }
     }, this);
   },
 
