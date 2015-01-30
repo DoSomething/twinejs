@@ -40,13 +40,13 @@ var exportsms = function() {
 
         // Check tag name and passage type to determine how to process this data
         tagName = passage.tagName.toUpperCase();
-        passageType = passage.attributes.length > 0 ? passage.attributes.getNamedItem('type') : '';
+        passageType = passage.attributes.getNamedItem('type') ? passage.attributes.getNamedItem('type').value : '';
 
         if (tagName == 'TW-PASSAGESTORYCONFIGDATA') {
           config = _compileStoryConfig(passage.attributes);
         }
         else if (tagName == 'TW-PASSAGEDATA' && passageType == PassageDS.prototype.defaults.type) {
-          ;
+          passages.push(_compilePassage(passage));
         }
         else {
           // Ignore data that isn't from a custom DS passage
@@ -56,6 +56,7 @@ var exportsms = function() {
 
     // Display resulting JSON to the screen
     result = _merge(result, config);
+    result = _merge(result, _buildStory(passages));
 
     return result;
   }
@@ -96,6 +97,40 @@ var exportsms = function() {
     data.mobile_create.not_enough_players_oip = attrs.getNamedItem('mc_not_enough_players_oip') ? attrs.getNamedItem('mc_not_enough_players_oip').value : 0;
 
     return data;
+  }
+
+  /**
+   * Get passage data out of passage elements and return as an object with just the info we need.
+   *
+   * @param passage
+   *   Passage data as an HTML tw-passagedata element
+   * @return Object
+   */
+  function _compilePassage(passage) {
+    var data = {};
+    var attrs = passage.attributes;
+
+    data.optinpath = attrs.getNamedItem('optinpath') ? attrs.getNamedItem('optinpath').value : 0;
+    data.name = attrs.getNamedItem('name') ? attrs.getNamedItem('name').value : '';
+    data.text = passage.innerText.trim();
+
+    return data;
+  }
+
+  /**
+   * Build story config out of an array of passage data.
+   *
+   * @param passages
+   *   Array of passages in the story
+   * @return Story object
+   */
+  function _buildStory(passages) {
+    var story;
+
+    // @todo Need to actually convert this into the format expected for our SMS game configs
+    story = {'story': passages};
+
+    return story;
   }
 
   return {
