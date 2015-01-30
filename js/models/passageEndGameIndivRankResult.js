@@ -1,14 +1,14 @@
 'use strict';
 
-var PassageEndGameIndividualSS = Passage.extend({
+var PassageEndGameIndivRankResult = Passage.extend({
   defaults: {
-    type: 'endGameIndividualSS'
+    type: 'passageEndGameIndivRankResult'
   },
 
   template: _.template(''),
 
   initialize: function() {
-    console.log('PassageEndGameIndividualSS.initialize()');
+    console.log('PassageEndGameIndivRankResult.initialize()');
   },
 
   validate: function(attrs) {

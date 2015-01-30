@@ -1,6 +1,6 @@
 'use strict';
 
-StoryEditView.PassageEndGameGroupEditor = Backbone.View.extend({
+StoryEditView.PassageEndGameIndivRankResultEditor = Backbone.View.extend({
 
   /**
    * Opens modal dialog for editing the passage.

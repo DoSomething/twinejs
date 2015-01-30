@@ -1,14 +1,14 @@
 'use strict';
 
-var PassageEndGameGroup = Passage.extend({
+var PassageEndGameGroupSuccessNumberResult = Passage.extend({
   defaults: {
-    type: 'endGameGroup'
+    type: 'passageEndGameGroupSuccessNumberResult'
   },
 
   template: _.template(''),
 
   initialize: function() {
-    console.log('PassageEndGameGroup.initialize()');
+    console.log('PassageEndGameGroupSuccessNumberResult.initialize()');
   },
 
   validate: function(attrs) {

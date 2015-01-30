@@ -1,14 +1,14 @@
 'use strict';
 
-var PassageEndGameIndividualBT = Passage.extend({
+var PassageEndGameIndivSuperlativeResult = Passage.extend({
   defaults: {
-    type: 'endGameIndividualBT'
+    type: 'passageEndGameIndivSuperlativeResult'
   },
 
   template: _.template(''),
 
   initialize: function() {
-    console.log('PassageEndGameIndividualBT.initialize()');
+    console.log('passageEndGameIndivSuperlativeResult.initialize()');
   },
 
   validate: function(attrs) {
