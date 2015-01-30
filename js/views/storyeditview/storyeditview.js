@@ -249,11 +249,11 @@ var StoryEditView = Marionette.CompositeView.extend(
   },
 
   addPassageDS: function(name, left, top) {
-    this.addPassage(name, left, top, 'ds');
+    this.addPassage(name, left, top, PassageDS.prototype.defaults.type);
   },
 
   addStoryConfig: function(name, left, top) {
-    this.addPassage(name, left, top, 'storyConfig');
+    this.addPassage(name, left, top, PassageStoryConfig.prototype.defaults.type);
   },
 
   addPassageEndLevel: function(name, left, top) {
