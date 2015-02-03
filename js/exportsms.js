@@ -125,12 +125,66 @@ var exportsms = function() {
    * @return Story object
    */
   function _buildStory(passages) {
-    var story;
+    var story,
+        storyPassage,
+        passage,
+        optinpath,
+        key,
+        links,
+        answers,
+        next,
+        error,
+        i,
+        j,
+        k;
 
-    // @todo Need to actually convert this into the format expected for our SMS game configs
-    story = {'story': passages};
+    story = {};
+    for (i = 0; i < passages.length; i++) {
+      passage = passages[i];
+      if (typeof story[passage.optinpath.toString()] === 'undefined') {
+        storyPassage = {};
+        storyPassage.name = passage.name;
+        storyPassage.choices = [];
 
-    return story;
+        // Find links in the text
+        links = passage.text.match(/\[\[.*?\]\]/g);
+
+        for (j = 0; links != null && j < links.length; j++) {
+          // Assumes link format is [[display text|link|valid answers]]
+          key = links[j].replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$2');
+          answers = links[j].replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$3');
+          next = 0;
+
+          // Build the choices array based on the links found
+          storyPassage.choices[j] = {};
+          storyPassage.choices[j].key = key;
+          storyPassage.choices[j].valid_answers = [answers];
+
+          // To get the `next` optinpath, search through all passages to find the
+          // passage.name that matches the key for this choice.
+          for (k = 0; k < passages.length; k++) {
+            if (passages[k].name == key) {
+              next = passages[k].optinpath;
+              break;
+            }
+          }
+
+          storyPassage.choices[j].next = next;
+          if (next == 0) {
+            error = 'Next opt-in path not found for passage: ' + passage.name;
+            console.log(error);
+          }
+        }
+
+        story[passage.optinpath.toString()] = storyPassage;
+      }
+      else {
+        error = 'Warning - multiple passages with the same optinpath';
+        console.log(error);
+      }
+    }
+
+    return {'story': story};
   }
 
   return {
