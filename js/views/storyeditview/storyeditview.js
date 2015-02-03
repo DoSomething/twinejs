@@ -336,6 +336,14 @@ var StoryEditView = Marionette.CompositeView.extend(
   },
 
   /**
+   * Opens a new tab with the story exported as needed for our SMS config.
+   */
+  exportForSms: function()
+  {
+    window.open('#stories/' + this.model.id + '/smsGame', 'twinestory_proof_' + this.model.id);
+  },
+
+  /**
    Opens a new tab with the proofing copy of this story. This
    will re-use the same tab for a particular story.
 
