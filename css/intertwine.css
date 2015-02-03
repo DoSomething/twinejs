@@ -1,0 +1,9 @@
+/* 
+  Custom styles and overrides of twine.js styles.
+*/
+
+#add-node 
+{
+  margin-left: -20em;
+  width: 40em;
+}
