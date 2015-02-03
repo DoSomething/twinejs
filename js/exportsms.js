@@ -80,19 +80,19 @@ var exportsms = function() {
   function _compileStoryConfig(attrs) {
     var data = {};
 
-    data.__comments = attrs.getNamedItem('description') ? attrs.getNamedItem('description').value : '';
-    data.alpha_wait_oip = attrs.getNamedItem('alpha_wait_oip') ? attrs.getNamedItem('alpha_wait_oip').value : 0;
-    data.alpha_start_ask_oip = attrs.getNamedItem('alpha_start_ask_oip') ? attrs.getNamedItem('alpha_start_ask_oip').value : 0;
-    data.beta_join_ask_oip = attrs.getNamedItem('beta_join_ask_oip') ? attrs.getNamedItem('beta_join_ask_oip').value : 0;
-    data.beta_wait_oip = attrs.getNamedItem('beta_wait_oip') ? attrs.getNamedItem('beta_wait_oip').value : 0;
-    data.game_in_progress_oip = attrs.getNamedItem('game_in_progress_oip') ? attrs.getNamedItem('game_in_progress_oip').value : 0;
+    data.__comments =               attrs.getNamedItem('description') ? attrs.getNamedItem('description').value : '';
+    data.alpha_wait_oip =           attrs.getNamedItem('alpha_wait_oip') ? attrs.getNamedItem('alpha_wait_oip').value : 0;
+    data.alpha_start_ask_oip =      attrs.getNamedItem('alpha_start_ask_oip') ? attrs.getNamedItem('alpha_start_ask_oip').value : 0;
+    data.beta_join_ask_oip =        attrs.getNamedItem('beta_join_ask_oip') ? attrs.getNamedItem('beta_join_ask_oip').value : 0;
+    data.beta_wait_oip =            attrs.getNamedItem('beta_wait_oip') ? attrs.getNamedItem('beta_wait_oip').value : 0;
+    data.game_in_progress_oip =     attrs.getNamedItem('game_in_progress_oip') ? attrs.getNamedItem('game_in_progress_oip').value : 0;
     data.game_ended_from_exit_oip = attrs.getNamedItem('game_ended_from_exit_oip') ? attrs.getNamedItem('game_ended_from_exit_oip').value : 0;
-    data.story_start_oip = attrs.getNamedItem('story_start_oip') ? attrs.getNamedItem('story_start_oip').value : 0;
-    data.ask_solo_play = attrs.getNamedItem('ask_solo_play') ? attrs.getNamedItem('ask_solo_play').value : 0;
+    data.story_start_oip =          attrs.getNamedItem('story_start_oip') ? attrs.getNamedItem('story_start_oip').value : 0;
+    data.ask_solo_play =            attrs.getNamedItem('ask_solo_play') ? attrs.getNamedItem('ask_solo_play').value : 0;
     data.mobile_create = {};
-    data.mobile_create.ask_beta_1_oip = attrs.getNamedItem('mc_ask_beta_1_oip') ? attrs.getNamedItem('mc_ask_beta_1_oip').value : 0;
-    data.mobile_create.ask_beta_2_oip = attrs.getNamedItem('mc_ask_beta_2_oip') ? attrs.getNamedItem('mc_ask_beta_2_oip').value : 0;
-    data.mobile_create.invalid_mobile_oip = attrs.getNamedItem('mc_invalid_mobile_oip') ? attrs.getNamedItem('mc_invalid_mobile_oip').value : 0;
+    data.mobile_create.ask_beta_1_oip =         attrs.getNamedItem('mc_ask_beta_1_oip') ? attrs.getNamedItem('mc_ask_beta_1_oip').value : 0;
+    data.mobile_create.ask_beta_2_oip =         attrs.getNamedItem('mc_ask_beta_2_oip') ? attrs.getNamedItem('mc_ask_beta_2_oip').value : 0;
+    data.mobile_create.invalid_mobile_oip =     attrs.getNamedItem('mc_invalid_mobile_oip') ? attrs.getNamedItem('mc_invalid_mobile_oip').value : 0;
     data.mobile_create.not_enough_players_oip = attrs.getNamedItem('mc_not_enough_players_oip') ? attrs.getNamedItem('mc_not_enough_players_oip').value : 0;
 
     return data;
