@@ -3,15 +3,28 @@
 var PassageEndGameGroupSuccessNumberResult = Passage.extend({
   defaults: {
     type: 'passageEndGameGroupSuccessNumberResult',
-    name: 'Endgame Group Success Number result',
-    description: 'group endgame result, based on number of group success paths traversed',
-    
+    top: 0,
+    left: 0,
+    name: 'Endgame Group Success Number Result',
+    description: 'group endgame result message, based on the number of levels the group has successfully passed',
+    text: '',
+    optinpath: 0,
+    // how many levels must this group have successfully passed in order for them to receive this message?
+    minNumLevelSuccess: 0,
+    maxNumLevelSuccess: 0
   },
 
-  template: _.template(''),
+  template: _.template('<tw-passagedata pid="<%- id %>" name="<%- name %>" ' +
+             'type="<%- type %>" ' +
+             'position="<%- left %>,<%- top %>" ' +
+             'optinpath="<%- optinpath %>" ' +
+             'minNumLevelSuccess="<%- minNumLevelSuccess %>" ' +
+             'maxNumLevelSuccess="<%- maxNumLevelSuccess %>" ' +
+             '>' +
+             '<%- text %></tw-passagedata>'),
 
   initialize: function() {
-    console.log('PassageEndGameGroupSuccessNumberResult.initialize()');
+    Passage.prototype.initialize.apply(this);
   },
 
   validate: function(attrs) {
@@ -19,7 +32,16 @@ var PassageEndGameGroupSuccessNumberResult = Passage.extend({
   },
 
   publish: function(id) {
-    return this.template({});
+    return this.template({
+      id: id,
+      name: this.get('name'),
+      left: this.get('left'),
+      top: this.get('top'),
+      text: this.get('text'),
+      optinpath: this.get('optinpath'),
+      minNumLevelSuccess: this.get('minNumLevelSuccess'),
+      maxNumLevelSuccess: this.get('maxNumLevelSuccess')
+    });
   }
 
 });
