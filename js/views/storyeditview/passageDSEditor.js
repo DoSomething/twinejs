@@ -14,7 +14,6 @@ StoryEditView.PassageDSEditor = Backbone.View.extend({
     this.$('.passageName').val(this.model.get('name'));
     var text = this.model.get('text');
     this.$('.passageText').val((text == Passage.prototype.defaults.text) ? '' : text);
-
     this.$('#edit-ds-oip').val(this.model.get('optinpath'));
 
     this.$el.data('modal').trigger('show');
