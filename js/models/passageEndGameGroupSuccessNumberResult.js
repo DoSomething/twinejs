@@ -2,7 +2,10 @@
 
 var PassageEndGameGroupSuccessNumberResult = Passage.extend({
   defaults: {
-    type: 'passageEndGameGroupSuccessNumberResult'
+    type: 'passageEndGameGroupSuccessNumberResult',
+    name: 'Endgame Group Success Number result',
+    description: 'group endgame result, based on number of group success paths traversed',
+    
   },
 
   template: _.template(''),
