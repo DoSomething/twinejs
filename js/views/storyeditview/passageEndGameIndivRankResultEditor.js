@@ -2,6 +2,10 @@
 
 StoryEditView.PassageEndGameIndivRankResultEditor = Backbone.View.extend({
 
+  initialize: function() {
+    this.$el.on('modalhide', _.bind(this.save, this));
+  },
+  
   /**
    * Opens modal dialog for editing the passage.
    */

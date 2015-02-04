@@ -14,7 +14,6 @@ var PassageEndGameIndivSuperlativeResult = Passage.extend({
   },
 
   template: _.template('<tw-passagedata pid="<%- id %>" name="<%- name %>" ' +
-             'type="<%- type %>" ' +
              'position="<%- left %>,<%- top %>" ' +
              'optinpath="<%- optinpath %>" ' +
              'pathFlag="<%- pathFlag %>" ' +
