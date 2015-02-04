@@ -40,13 +40,13 @@ var exportsms = function() {
 
         // Check tag name and passage type to determine how to process this data
         tagName = passage.tagName.toUpperCase();
-        passageType = passage.attributes.length > 0 ? passage.attributes.getNamedItem('type') : '';
+        passageType = passage.attributes.getNamedItem('type') ? passage.attributes.getNamedItem('type').value : '';
 
         if (tagName == 'TW-PASSAGESTORYCONFIGDATA') {
           config = _compileStoryConfig(passage.attributes);
         }
         else if (tagName == 'TW-PASSAGEDATA' && passageType == PassageDS.prototype.defaults.type) {
-          ;
+          passages.push(_compilePassage(passage));
         }
         else {
           // Ignore data that isn't from a custom DS passage
@@ -56,6 +56,7 @@ var exportsms = function() {
 
     // Display resulting JSON to the screen
     result = _merge(result, config);
+    result = _merge(result, _buildStory(passages));
 
     return result;
   }
@@ -96,6 +97,94 @@ var exportsms = function() {
     data.mobile_create.not_enough_players_oip = attrs.getNamedItem('mc_not_enough_players_oip') ? attrs.getNamedItem('mc_not_enough_players_oip').value : 0;
 
     return data;
+  }
+
+  /**
+   * Get passage data out of passage elements and return as an object with just the info we need.
+   *
+   * @param passage
+   *   Passage data as an HTML tw-passagedata element
+   * @return Object
+   */
+  function _compilePassage(passage) {
+    var data = {};
+    var attrs = passage.attributes;
+
+    data.optinpath = attrs.getNamedItem('optinpath') ? attrs.getNamedItem('optinpath').value : 0;
+    data.name = attrs.getNamedItem('name') ? attrs.getNamedItem('name').value : '';
+    data.text = passage.innerText.trim();
+
+    return data;
+  }
+
+  /**
+   * Build story config out of an array of passage data.
+   *
+   * @param passages
+   *   Array of passages in the story
+   * @return Story object
+   */
+  function _buildStory(passages) {
+    var story,
+        storyPassage,
+        passage,
+        optinpath,
+        key,
+        links,
+        answers,
+        next,
+        error,
+        i,
+        j,
+        k;
+
+    story = {};
+    for (i = 0; i < passages.length; i++) {
+      passage = passages[i];
+      if (typeof story[passage.optinpath.toString()] === 'undefined') {
+        storyPassage = {};
+        storyPassage.name = passage.name;
+        storyPassage.choices = [];
+
+        // Find links in the text
+        links = passage.text.match(/\[\[.*?\]\]/g);
+
+        for (j = 0; links != null && j < links.length; j++) {
+          // Assumes link format is [[display text|link|valid answers]]
+          key = links[j].replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$2');
+          answers = links[j].replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$3');
+          next = 0;
+
+          // Build the choices array based on the links found
+          storyPassage.choices[j] = {};
+          storyPassage.choices[j].key = key;
+          storyPassage.choices[j].valid_answers = [answers];
+
+          // To get the `next` optinpath, search through all passages to find the
+          // passage.name that matches the key for this choice.
+          for (k = 0; k < passages.length; k++) {
+            if (passages[k].name == key) {
+              next = passages[k].optinpath;
+              break;
+            }
+          }
+
+          storyPassage.choices[j].next = next;
+          if (next == 0) {
+            error = 'Next opt-in path not found for passage: ' + passage.name;
+            console.log(error);
+          }
+        }
+
+        story[passage.optinpath.toString()] = storyPassage;
+      }
+      else {
+        error = 'Warning - multiple passages with the same optinpath';
+        console.log(error);
+      }
+    }
+
+    return {'story': story};
   }
 
   return {
