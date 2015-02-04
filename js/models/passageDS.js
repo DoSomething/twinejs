@@ -7,7 +7,10 @@ var PassageDS = Passage.extend({
     left: 0,
     name: 'Untitled DS Passage',
     text: '',
-    optinpath: 0
+    optinpath: 0,
+    groupSuccessPath: false,
+    indivSuccessPath: false,
+    indivSuperlativePath: ''
   },
 
   template: _.template('<tw-passagedata pid="<%- id %>" name="<%- name %>" ' +
@@ -88,7 +91,10 @@ var PassageDS = Passage.extend({
       top: this.get('top'),
       text: this.get('text'),
       type: this.get('type'),
-      optinpath: this.get('optinpath')
+      optinpath: this.get('optinpath'),
+      groupSuccessPath: this.get('groupSuccessPath'),
+      indivSuccessPath: this.get('indivSuccessPath'),
+      indivSuperlativePath: this.get('indivSuperlativePath')
     });
   }
 
