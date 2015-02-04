@@ -2,6 +2,10 @@
 
 StoryEditView.PassageEndGameGroupSuccessNumberResultEditor = Backbone.View.extend({
 
+  initialize: function() {
+    this.$el.on('modalhide', _.bind(this.save, this));
+  },
+  
   /**
    * Opens modal dialog for editing the passage.
    */
@@ -12,7 +16,7 @@ StoryEditView.PassageEndGameGroupSuccessNumberResultEditor = Backbone.View.exten
     this.$('.passageText').val((text == Passage.prototype.defaults.text) ? '' : text);
     this.$('#edit-ds-oip').val(this.model.get('optinpath'));
     this.$('#edit-min-num-group-success').val(this.model.get('minNumLevelSuccess'));
-    this.$('#edit-max-num-group-success').val(this.model.get('maxNumLevelSuccess '));
+    this.$('#edit-max-num-group-success').val(this.model.get('maxNumLevelSuccess'));
 
     this.$el.data('modal').trigger('show');
   },
