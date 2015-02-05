@@ -1,6 +1,6 @@
 'use strict';
 
-StoryEditView.PassageEndLevelEditor = Backbone.View.extend({
+StoryEditView.PassageEndLevelGroupEditor = Backbone.View.extend({
 
   /**
    * Opens modal dialog for editing the passage.

@@ -179,9 +179,13 @@ var PassageItemView = Marionette.ItemView.extend(
       this.parentView.passageEndGameIndivRankResultEditor.model = this.model;
       this.parentView.passageEndGameIndivRankResultEditor.open();
     }
-    else if (type == 'endLevel') {
-      this.parentView.passageEndLevelEditor.model = this.model;
-      this.parentView.passageEndLevelEditor.open();
+    else if (type == 'endLevelIndiv') {
+      this.parentView.passageEndLevelIndivEditor.model = this.model;
+      this.parentView.passageEndLevelIndivEditor.open();
+    }
+    else if (type == 'endLevelGroup') {
+      this.parentView.passageEndLevelGroupEditor.model = this.model;
+      this.parentView.passageEndLevelGroupEditor.open();
     }
     else if (type == 'storyConfig') {
       this.parentView.passageStoryConfigEditor.model = this.model;

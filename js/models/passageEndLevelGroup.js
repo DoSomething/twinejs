@@ -1,14 +1,14 @@
 'use strict';
 
-var PassageEndLevel = Passage.extend({
+var PassageEndLevelGroup = Passage.extend({
   defaults: {
-    type: 'endLevel'
+    type: 'endLevelGroup'
   },
 
   template: _.template(''),
 
   initialize: function() {
-    console.log('PassageEndLevel.initialize()');
+    console.log('PassageEndLevelGroup.initialize()');
   },
 
   validate: function(attrs) {
@@ -19,4 +19,4 @@ var PassageEndLevel = Passage.extend({
     return this.template({});
   }
 
-});
+}); 

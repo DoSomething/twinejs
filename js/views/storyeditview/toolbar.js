@@ -104,8 +104,12 @@ StoryEditView.Toolbar = Backbone.View.extend(
       this.parent.addStoryConfig();
     },
 
-    'click #addPassageEndLevel': function (e) {
-      this.parent.addPassageEndLevel();
+    'click #addPassageEndLevelIndiv': function (e) {
+      this.parent.addPassageEndLevelIndiv();
+    },
+
+    'click #addPassageEndLevelGroup': function (e) {
+      this.parent.addPassageEndLevelGroup();
     },
 
     'click #addPassageEndGameGroupSuccessNumberResult': function (e) {
