@@ -21,7 +21,8 @@ var importsms = function() {
         allPassages,
         story,
         storyConfig,
-        passage,
+        pIndex,
+        passages,
         keys,
         i;
 
@@ -46,7 +47,7 @@ var importsms = function() {
     // Parse through the "story" object
     keys = Object.keys(data.story)
     for (i = 0; i < keys.length; i++) {
-      passage = undefined;
+      passages = [];
 
       if (/^END-LEVEL\d+$/.test(keys[i])) {
         // END-LEVEL#
@@ -56,15 +57,15 @@ var importsms = function() {
       }
       else if (/^\d+$/.test(keys[i])) {
         // Normal DS Passage
-        passage = _parseForPassageDS(keys[i], data.story);
+        passages = [_parseForPassageDS(keys[i], data.story)];
       }
       else {
         // unhandled key
       }
 
-      if (passage) {
-        passage.story = story.id;
-        allPassages.create(passage, {wait: true});
+      for (pIndex in passages) {
+        passages[pIndex].story = story.id;
+        allPassages.create(passages[pIndex], {wait: true});
       }
     }
 
