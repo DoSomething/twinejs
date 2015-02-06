@@ -15,9 +15,6 @@ StoryEditView.PassageDSEditor = Backbone.View.extend({
     var text = this.model.get('text');
     this.$('.passageText').val((text == Passage.prototype.defaults.text) ? '' : text);
     this.$('#edit-ds-oip').val(this.model.get('optinpath'));
-    this.$('#edit-group-success-path').val(this.model.get('groupSuccessPath'));
-    this.$('#edit-indiv-success-path').val(this.model.get('indivSuccessPath'));
-    this.$('#edit-indiv-superlative-path').val(this.model.get('indivSuperlativePath'));
 
     this.$el.data('modal').trigger('show');
   },
@@ -42,10 +39,7 @@ StoryEditView.PassageDSEditor = Backbone.View.extend({
     saveResult = this.model.save({
       name: this.$('.passageName').val(),
       text: this.$('.passageText').val(),
-      optinpath: this.$('#edit-ds-oip').val(),
-      groupSuccessPath: this.$('#edit-group-success-path').val(),
-      indivSuccessPath: this.$('#edit-indiv-success-path').val(),
-      indivSuperlativePath: this.$('#edit-indiv-superlative-path').val()
+      optinpath: this.$('#edit-ds-oip').val()
     });
 
     if (saveResult) {

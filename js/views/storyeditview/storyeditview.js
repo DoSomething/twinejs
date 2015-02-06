@@ -258,23 +258,23 @@ var StoryEditView = Marionette.CompositeView.extend(
   },
 
   addPassageEndLevelIndiv: function(name, left, top) {
-    this.addPassage(name, left, top, 'endLevel');
+    this.addPassage(name, left, top, PassageEndLevelIndiv.prototype.defaults.type);
   },
 
   addPassageEndLevelGroup: function(name, left, top) {
-    this.addPassage(name, left, top, 'endLevel');
+    this.addPassage(name, left, top, PassageEndLevelGroup.prototype.defaults.type);
   },
 
   addPassageEndGameGroupSuccessNumberResult: function(name, left, top) {
-    this.addPassage(name, left, top, passageEndGameGroupSuccessNumberResult.prototype.defaults.type);
+    this.addPassage(name, left, top, PassageEndGameGroupSuccessNumberResult.prototype.defaults.type);
   },
 
   addPassageEndGameIndivSuperlativeResult: function(name, left, top) {
-    this.addPassage(name, left, top, passageEndGameIndivSuperlativeResult.prototype.defaults.type);
+    this.addPassage(name, left, top, PassageEndGameIndivSuperlativeResult.prototype.defaults.type);
   },
 
   addPassageEndGameIndivRankResult: function(name, left, top) {
-    this.addPassage(name, left, top, passageEndGameIndivRankResult.prototype.defaults.type);
+    this.addPassage(name, left, top, PassageEndGameIndivRankResult.prototype.defaults.type);
   },
 
   /**
