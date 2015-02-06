@@ -141,6 +141,7 @@ var TwineApp = Backbone.Marionette.Application.extend(
     var data = story.publish(null, null);
     
     var formatted = exportsms.format(data);
+    // Display resulting JSON to the screen
     $('body').html(JSON.stringify(formatted));
   },
 

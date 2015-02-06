@@ -45,8 +45,10 @@ var exportsms = function() {
         if (tagName == 'TW-PASSAGESTORYCONFIGDATA') {
           config = _compileStoryConfig(passage.attributes);
         }
-        else if (tagName == 'TW-PASSAGEDATA' && passageType == PassageDS.prototype.defaults.type) {
-          passages.push(_compilePassage(passage));
+        else if (tagName == 'TW-PASSAGEDATA') {
+          if (passageType == PassageDS.prototype.defaults.type) {
+            passages.push(_compilePassage(passage));
+          }
         }
         else {
           // Ignore data that isn't from a custom DS passage
@@ -54,7 +56,7 @@ var exportsms = function() {
       }
     }
 
-    // Display resulting JSON to the screen
+    // Combine JSON objects into config object. 
     result = _merge(result, config);
     result = _merge(result, _buildStory(passages));
 
