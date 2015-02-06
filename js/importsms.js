@@ -48,13 +48,13 @@ var importsms = function() {
     for (i = 0; i < keys.length; i++) {
       passage = undefined;
 
-      if (keys[i].match(/^END-LEVEL\d+$/)) {
+      if (/^END-LEVEL\d+$/.test(keys[i])) {
         // END-LEVEL#
       }
-      else if (keys[i].match(/^END-LEVEL\d+-GROUP$/)) {
+      else if (/^END-LEVEL\d+-GROUP$/.test(keys[i])) {
         // END-LEVEL#-GROUP
       }
-      else if (keys[i].match(/^\d+$/)) {
+      else if (/^\d+$/.test(keys[i])) {
         // Normal DS Passage
         passage = _parseForPassageDS(keys[i], data.story);
       }
