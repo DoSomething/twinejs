@@ -147,17 +147,27 @@ var StoryListView = Backbone.Marionette.CompositeView.extend(
   {
     var reader = new FileReader();
     var bubble = this.$('.importStory').closest('.bubbleContainer');
+    var ext = '';
+    var filename = '';
+    var file;
+
     bubble.find('.form').addClass('hide');
     bubble.find('.working').removeClass('hide');
 
     reader.onload = _.bind(function (e)
     {
+      var count = 0;
       var className = '';
       var message = '';
 
       try
       {
-        var count = window.app.importFile(e.target.result);
+        if (ext == 'text/html') {
+          count = window.app.importFile(e.target.result);
+        }
+        else if (ext == 'application/json') {
+          count = window.app.importFileSmsGame(filename, e.target.result);
+        }
 
         if (count > 0)
         {
@@ -186,7 +196,13 @@ var StoryListView = Backbone.Marionette.CompositeView.extend(
       ui.initEl(this.$el);
     }, this);
 
-    reader.readAsText(e.target.files[0], 'UTF-8');
+    if (e.target.files.length > 0) {
+      file = e.target.files[0];
+      filename = file.name.substring(0, file.name.length - ".json".length);
+      ext = e.target.files[0].type;
+
+      reader.readAsText(e.target.files[0], 'UTF-8');
+    }
   },
 
   /**
