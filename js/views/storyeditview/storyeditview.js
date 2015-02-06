@@ -167,7 +167,8 @@ var StoryEditView = Marionette.CompositeView.extend(
     this.passageEndGameGroupSuccessNumberResultEditor = new StoryEditView.PassageEndGameGroupSuccessNumberResultEditor({ el: this.$('#passageEndGameGroupSuccessNumberResultModal'), parent: this });
     this.passageEndGameIndivSuperlativeResultEditor = new StoryEditView.PassageEndGameIndivSuperlativeResultEditor({ el: this.$('#passageEndGameIndivSuperlativeResultModal'), parent: this });
     this.passageEndGameIndivRankResultEditor = new StoryEditView.PassageEndGameIndivRankResultEditor({ el: this.$('#passageEndGameIndivRankResultModal'), parent: this });
-    this.passageEndLevelEditor = new StoryEditView.PassageEndLevelEditor({ el: this.$('#passageEndLevelModal'), parent: this });
+    this.passageEndLevelIndivEditor = new StoryEditView.PassageEndLevelIndivEditor({ el: this.$('#passageEndLevelIndivModal'), parent: this });
+    this.passageEndLevelGroupEditor = new StoryEditView.PassageEndLevelGroupEditor({ el: this.$('#passageEndLevelGroupModal'), parent: this });
     this.passageStoryConfigEditor = new StoryEditView.PassageStoryConfigEditor({ el: this.$('#passageStoryConfigModal'), parent: this });
 
     if (! window.app.hasPrimaryTouchUI())
@@ -256,20 +257,24 @@ var StoryEditView = Marionette.CompositeView.extend(
     this.addPassage(name, left, top, PassageStoryConfig.prototype.defaults.type);
   },
 
-  addPassageEndLevel: function(name, left, top) {
-    this.addPassage(name, left, top, 'endLevel');
+  addPassageEndLevelIndiv: function(name, left, top) {
+    this.addPassage(name, left, top, PassageEndLevelIndiv.prototype.defaults.type);
+  },
+
+  addPassageEndLevelGroup: function(name, left, top) {
+    this.addPassage(name, left, top, PassageEndLevelGroup.prototype.defaults.type);
   },
 
   addPassageEndGameGroupSuccessNumberResult: function(name, left, top) {
-    this.addPassage(name, left, top, passageEndGameGroupSuccessNumberResult.prototype.defaults.type);
+    this.addPassage(name, left, top, PassageEndGameGroupSuccessNumberResult.prototype.defaults.type);
   },
 
   addPassageEndGameIndivSuperlativeResult: function(name, left, top) {
-    this.addPassage(name, left, top, passageEndGameIndivSuperlativeResult.prototype.defaults.type);
+    this.addPassage(name, left, top, PassageEndGameIndivSuperlativeResult.prototype.defaults.type);
   },
 
   addPassageEndGameIndivRankResult: function(name, left, top) {
-    this.addPassage(name, left, top, passageEndGameIndivRankResult.prototype.defaults.type);
+    this.addPassage(name, left, top, PassageEndGameIndivRankResult.prototype.defaults.type);
   },
 
   /**

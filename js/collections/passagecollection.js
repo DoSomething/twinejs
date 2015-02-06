@@ -19,6 +19,12 @@ var PassageCollection = Backbone.Collection.extend(
     else if (attrs.type === PassageDS.prototype.defaults.type) {
       return new PassageDS(attrs, options);
     }
+    else if (attrs.type === PassageEndLevelIndiv.prototype.defaults.type) {
+      return new PassageEndLevelIndiv(attrs, options);
+    }
+    else if (attrs.type === PassageEndLevelGroup.prototype.defaults.type) {
+      return new PassageEndLevelGroup(attrs, options);
+    }
     else if (attrs.type === PassageEndGameIndivSuperlativeResult.prototype.defaults.type) {
       return new PassageEndGameIndivSuperlativeResult(attrs, options);
     }

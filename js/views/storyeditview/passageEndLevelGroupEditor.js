@@ -1,6 +1,6 @@
 'use strict';
 
-StoryEditView.PassageDSEditor = Backbone.View.extend({
+StoryEditView.PassageEndLevelGroupEditor = Backbone.View.extend({
 
   initialize: function() {
     this.$el.on('modalhide', _.bind(this.save, this));
@@ -15,6 +15,7 @@ StoryEditView.PassageDSEditor = Backbone.View.extend({
     var text = this.model.get('text');
     this.$('.passageText').val((text == Passage.prototype.defaults.text) ? '' : text);
     this.$('#edit-ds-oip').val(this.model.get('optinpath'));
+    this.$('#edit-group-success-path').val(this.model.get('groupSuccessPath'));
 
     this.$el.data('modal').trigger('show');
   },
@@ -22,8 +23,7 @@ StoryEditView.PassageDSEditor = Backbone.View.extend({
   /**
    * Closes modal.
    */
-  close: function()
-  {
+  close: function() {
     this.$el.data('modal').trigger('hide');
   },
 
@@ -39,7 +39,8 @@ StoryEditView.PassageDSEditor = Backbone.View.extend({
     saveResult = this.model.save({
       name: this.$('.passageName').val(),
       text: this.$('.passageText').val(),
-      optinpath: this.$('#edit-ds-oip').val()
+      optinpath: this.$('#edit-ds-oip').val(),
+      groupSuccessPath: this.$('#edit-group-success-path').val()
     });
 
     if (saveResult) {

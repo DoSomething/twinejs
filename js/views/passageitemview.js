@@ -163,27 +163,31 @@ var PassageItemView = Marionette.ItemView.extend(
   edit: function()
   {
     var type = this.model.get('type');
-    if (type == 'ds') {
+    if (type == PassageDS.prototype.defaults.type) {
       this.parentView.passageDSEditor.model = this.model;
       this.parentView.passageDSEditor.open();
     }
-    else if (type == 'passageEndGameGroupSuccessNumberResult') {
+    else if (type == PassageEndGameGroupSuccessNumberResult.prototype.defaults.type) {
       this.parentView.passageEndGameGroupSuccessNumberResultEditor.model = this.model;
       this.parentView.passageEndGameGroupSuccessNumberResultEditor.open();
     }
-    else if (type == 'passageEndGameIndivSuperlativeResult') {
+    else if (type == PassageEndGameIndivSuperlativeResult.prototype.defaults.type) {
       this.parentView.passageEndGameIndivSuperlativeResultEditor.model = this.model;
       this.parentView.passageEndGameIndivSuperlativeResultEditor.open();
     }
-    else if (type == 'passageEndGameIndivRankResult') {
+    else if (type == PassageEndGameIndivRankResult.prototype.defaults.type) {
       this.parentView.passageEndGameIndivRankResultEditor.model = this.model;
       this.parentView.passageEndGameIndivRankResultEditor.open();
     }
-    else if (type == 'endLevel') {
-      this.parentView.passageEndLevelEditor.model = this.model;
-      this.parentView.passageEndLevelEditor.open();
+    else if (type == PassageEndLevelIndiv.prototype.defaults.type) {
+      this.parentView.passageEndLevelIndivEditor.model = this.model;
+      this.parentView.passageEndLevelIndivEditor.open();
     }
-    else if (type == 'storyConfig') {
+    else if (type == PassageEndLevelGroup.prototype.defaults.type) {
+      this.parentView.passageEndLevelGroupEditor.model = this.model;
+      this.parentView.passageEndLevelGroupEditor.open();
+    }
+    else if (type == PassageStoryConfig.prototype.defaults.type) {
       this.parentView.passageStoryConfigEditor.model = this.model;
       this.parentView.passageStoryConfigEditor.open();
     }
