@@ -1,12 +1,12 @@
 {
-  "name": "twine",
-  "version": "2.0.0",
-  "author": "Chris Klimas <klimas@gmail.com>",
-  "description": "a GUI for creating nonlinear stories",
+  "name": "intertwine",
+  "version": "1.0.0",
+  "author": "developers@dosomething.org",
+  "description": "A GUI for creating DoSomething.org non-linear SMS interactive stories",
   "license": "GPL v3",
   "repository": {
-    "type": "hg",
-    "url": "https://bitbucket.org/klembot/twinejs"
+    "type": "git",
+    "url": "https://github.com/DoSomething/intertwine"
   },
   "dependencies": {
     "grunt": "*",
