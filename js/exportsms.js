@@ -76,7 +76,7 @@ var exportsms = function() {
    * Helper function to create a position object from a string.
    *
    * @param coordinates
-   *   String coordinates {top,left}
+   *   String coordinates {left,top}
    * @return object
    */
   function _getPositionFromString(coordinates) {
@@ -85,8 +85,8 @@ var exportsms = function() {
 
     if (typeof coordinates === 'string') {
       comma = coordinates.indexOf(',');
-      pos.top = coordinates.substring(0, comma);
-      pos.left = coordinates.substring(comma + 1);
+      pos.left = coordinates.substring(0, comma);
+      pos.top = coordinates.substring(comma + 1);
     }
 
     return pos;
@@ -103,7 +103,7 @@ var exportsms = function() {
         strPos,
         data = {};
 
-    data.__comments               =  attrs.getNamedItem('description') ? attrs.getNamedItem('description').value : '';
+    data.__comments               = attrs.getNamedItem('description') ? attrs.getNamedItem('description').value : '';
     data.alpha_wait_oip           = attrs.getNamedItem('alpha_wait_oip') ? attrs.getNamedItem('alpha_wait_oip').value : 0;
     data.alpha_start_ask_oip      = attrs.getNamedItem('alpha_start_ask_oip') ? attrs.getNamedItem('alpha_start_ask_oip').value : 0;
     data.beta_join_ask_oip        = attrs.getNamedItem('beta_join_ask_oip') ? attrs.getNamedItem('beta_join_ask_oip').value : 0;
@@ -118,13 +118,17 @@ var exportsms = function() {
     data.mobile_create.invalid_mobile_oip     = attrs.getNamedItem('mc_invalid_mobile_oip') ? attrs.getNamedItem('mc_invalid_mobile_oip').value : 0;
     data.mobile_create.not_enough_players_oip = attrs.getNamedItem('mc_not_enough_players_oip') ? attrs.getNamedItem('mc_not_enough_players_oip').value : 0;
 
-    data._twinedata = {};
-    data._twinedata.storyconfig = {};
-    data._twinedata.storyconfig.pos = {};
     strPos = attrs.getNamedItem('position') ? attrs.getNamedItem('position').value : '0,0';
     pos = _getPositionFromString(strPos);
-    data._twinedata.storyconfig.pos.top  = pos.top;
-    data._twinedata.storyconfig.pos.left = pos.left;
+
+    data._twinedata = {
+      storyconfig: {
+        pos: {
+          top: pos.top,
+          left: pos.left
+        }
+      }
+    };
 
     return data;
   }
@@ -137,12 +141,18 @@ var exportsms = function() {
    * @return Object
    */
   function _compilePassage(passage) {
+    var pos, strPos;
     var data = {};
     var attrs = passage.attributes;
 
     data.optinpath = attrs.getNamedItem('optinpath') ? attrs.getNamedItem('optinpath').value : 0;
     data.name = attrs.getNamedItem('name') ? attrs.getNamedItem('name').value : '';
     data.text = passage.innerText.trim();
+
+    strPos = attrs.getNamedItem('position') ? attrs.getNamedItem('position').value : '0,0';
+    pos = _getPositionFromString(strPos);
+    data.top = pos.top;
+    data.left = pos.left;
 
     return data;
   }
@@ -206,6 +216,15 @@ var exportsms = function() {
           }
         }
 
+        // Store twine data to allow story to be imported properly
+        storyPassage._twinedata = {
+          pos: {
+            top: passage.top,
+            left: passage.left
+          }
+        };
+
+        // Add passage to the story with optinpath as its key
         story[passage.optinpath.toString()] = storyPassage;
       }
       else {

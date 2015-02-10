@@ -144,6 +144,13 @@ var importsms = function() {
       }
     }
 
+    // Find additional editor-specific info under _twinedata
+    if (typeof storyData[optinpath]._twinedata !== 'undefined'
+        && typeof storyData[optinpath]._twinedata.pos !== 'undefined') {
+      passage.top = storyData[optinpath]._twinedata.pos.top;
+      passage.left = storyData[optinpath]._twinedata.pos.left;
+    }
+
     return passage;
   }
 
