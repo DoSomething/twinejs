@@ -127,7 +127,11 @@ var importsms = function() {
     passage.name = storyData[optinpath].name;
     passage.optinpath = optinpath;
     if (storyData[optinpath].text) {
-      passage.text == storyData[optinpath].text;
+      passage.text = storyData[optinpath].text;
+    }
+    else if (typeof storyData[optinpath]._twinedata !== 'undefined'
+             && storyData[optinpath]._twinedata.text) {
+      passage.text = storyData[optinpath]._twinedata.text;
     }
     else {
       for (i = 0; i < storyData[optinpath].choices.length; i++) {

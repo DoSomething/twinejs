@@ -221,7 +221,8 @@ var exportsms = function() {
           pos: {
             top: passage.top,
             left: passage.left
-          }
+          },
+          text: passage.text
         };
 
         // Add passage to the story with optinpath as its key
