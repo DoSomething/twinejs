@@ -73,28 +73,58 @@ var exportsms = function() {
   }
 
   /**
+   * Helper function to create a position object from a string.
+   *
+   * @param coordinates
+   *   String coordinates {top,left}
+   * @return object
+   */
+  function _getPositionFromString(coordinates) {
+    var pos = {top: 0, left: 0};
+    var comma = 0;
+
+    if (typeof coordinates === 'string') {
+      comma = coordinates.indexOf(',');
+      pos.top = coordinates.substring(0, comma);
+      pos.left = coordinates.substring(comma + 1);
+    }
+
+    return pos;
+  }
+
+  /**
    * Process data from a story config passage to the structure expected for the SMS game config.
    *
    * @param attrs NamedNodeMap of attributes from a DOM element
    * @return Object
    */
   function _compileStoryConfig(attrs) {
-    var data = {};
+    var pos,
+        strPos,
+        data = {};
 
-    data.__comments =               attrs.getNamedItem('description') ? attrs.getNamedItem('description').value : '';
-    data.alpha_wait_oip =           attrs.getNamedItem('alpha_wait_oip') ? attrs.getNamedItem('alpha_wait_oip').value : 0;
-    data.alpha_start_ask_oip =      attrs.getNamedItem('alpha_start_ask_oip') ? attrs.getNamedItem('alpha_start_ask_oip').value : 0;
-    data.beta_join_ask_oip =        attrs.getNamedItem('beta_join_ask_oip') ? attrs.getNamedItem('beta_join_ask_oip').value : 0;
-    data.beta_wait_oip =            attrs.getNamedItem('beta_wait_oip') ? attrs.getNamedItem('beta_wait_oip').value : 0;
-    data.game_in_progress_oip =     attrs.getNamedItem('game_in_progress_oip') ? attrs.getNamedItem('game_in_progress_oip').value : 0;
+    data.__comments               =  attrs.getNamedItem('description') ? attrs.getNamedItem('description').value : '';
+    data.alpha_wait_oip           = attrs.getNamedItem('alpha_wait_oip') ? attrs.getNamedItem('alpha_wait_oip').value : 0;
+    data.alpha_start_ask_oip      = attrs.getNamedItem('alpha_start_ask_oip') ? attrs.getNamedItem('alpha_start_ask_oip').value : 0;
+    data.beta_join_ask_oip        = attrs.getNamedItem('beta_join_ask_oip') ? attrs.getNamedItem('beta_join_ask_oip').value : 0;
+    data.beta_wait_oip            = attrs.getNamedItem('beta_wait_oip') ? attrs.getNamedItem('beta_wait_oip').value : 0;
+    data.game_in_progress_oip     = attrs.getNamedItem('game_in_progress_oip') ? attrs.getNamedItem('game_in_progress_oip').value : 0;
     data.game_ended_from_exit_oip = attrs.getNamedItem('game_ended_from_exit_oip') ? attrs.getNamedItem('game_ended_from_exit_oip').value : 0;
-    data.story_start_oip =          attrs.getNamedItem('story_start_oip') ? attrs.getNamedItem('story_start_oip').value : 0;
-    data.ask_solo_play =            attrs.getNamedItem('ask_solo_play') ? attrs.getNamedItem('ask_solo_play').value : 0;
+    data.story_start_oip          = attrs.getNamedItem('story_start_oip') ? attrs.getNamedItem('story_start_oip').value : 0;
+    data.ask_solo_play            = attrs.getNamedItem('ask_solo_play') ? attrs.getNamedItem('ask_solo_play').value : 0;
     data.mobile_create = {};
-    data.mobile_create.ask_beta_1_oip =         attrs.getNamedItem('mc_ask_beta_1_oip') ? attrs.getNamedItem('mc_ask_beta_1_oip').value : 0;
-    data.mobile_create.ask_beta_2_oip =         attrs.getNamedItem('mc_ask_beta_2_oip') ? attrs.getNamedItem('mc_ask_beta_2_oip').value : 0;
-    data.mobile_create.invalid_mobile_oip =     attrs.getNamedItem('mc_invalid_mobile_oip') ? attrs.getNamedItem('mc_invalid_mobile_oip').value : 0;
+    data.mobile_create.ask_beta_1_oip         = attrs.getNamedItem('mc_ask_beta_1_oip') ? attrs.getNamedItem('mc_ask_beta_1_oip').value : 0;
+    data.mobile_create.ask_beta_2_oip         = attrs.getNamedItem('mc_ask_beta_2_oip') ? attrs.getNamedItem('mc_ask_beta_2_oip').value : 0;
+    data.mobile_create.invalid_mobile_oip     = attrs.getNamedItem('mc_invalid_mobile_oip') ? attrs.getNamedItem('mc_invalid_mobile_oip').value : 0;
     data.mobile_create.not_enough_players_oip = attrs.getNamedItem('mc_not_enough_players_oip') ? attrs.getNamedItem('mc_not_enough_players_oip').value : 0;
+
+    data._twinedata = {};
+    data._twinedata.storyconfig = {};
+    data._twinedata.storyconfig.pos = {};
+    strPos = attrs.getNamedItem('position') ? attrs.getNamedItem('position').value : '0,0';
+    pos = _getPositionFromString(strPos);
+    data._twinedata.storyconfig.pos.top  = pos.top;
+    data._twinedata.storyconfig.pos.left = pos.left;
 
     return data;
   }

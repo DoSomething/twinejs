@@ -39,8 +39,6 @@ var importsms = function() {
     // Parse for story config object
     storyConfig = _parseForStoryConfig(data);
     storyConfig.story = story.id;
-    storyConfig.left = 0;
-    storyConfig.top = 0;
 
     allPassages.create(storyConfig, {wait: true});
 
@@ -97,6 +95,13 @@ var importsms = function() {
       passage.mc_ask_beta_2_oip = data.mobile_create.ask_beta_2_oip;
       passage.mc_invalid_mobile_oip = data.mobile_create.invalid_mobile_oip;
       passage.mc_not_enough_players_oip = data.mobile_create.not_enough_players_oip;
+    }
+
+    if ('_twinedata' in data
+        && 'storyconfig' in data._twinedata
+        && 'pos' in data._twinedata.storyconfig) {
+      passage.top = data._twinedata.storyconfig.pos.top;
+      passage.left = data._twinedata.storyconfig.pos.left;
     }
 
     return passage;
