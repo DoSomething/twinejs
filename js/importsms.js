@@ -39,8 +39,6 @@ var importsms = function() {
     // Parse for story config object
     storyConfig = _parseForStoryConfig(data);
     storyConfig.story = story.id;
-    storyConfig.left = 0;
-    storyConfig.top = 0;
 
     passageCollection.create(storyConfig, {wait: true});
 
@@ -99,6 +97,13 @@ var importsms = function() {
       passage.mc_not_enough_players_oip = data.mobile_create.not_enough_players_oip;
     }
 
+    if ('_twinedata' in data
+        && 'storyconfig' in data._twinedata
+        && 'pos' in data._twinedata.storyconfig) {
+      passage.top = data._twinedata.storyconfig.pos.top;
+      passage.left = data._twinedata.storyconfig.pos.left;
+    }
+
     return passage;
   }
 
@@ -122,7 +127,11 @@ var importsms = function() {
     passage.name = storyData[optinpath].name;
     passage.optinpath = optinpath;
     if (storyData[optinpath].text) {
-      passage.text == storyData[optinpath].text;
+      passage.text = storyData[optinpath].text;
+    }
+    else if (typeof storyData[optinpath]._twinedata !== 'undefined'
+             && storyData[optinpath]._twinedata.text) {
+      passage.text = storyData[optinpath]._twinedata.text;
     }
     else {
       for (i = 0; i < storyData[optinpath].choices.length; i++) {
@@ -137,6 +146,13 @@ var importsms = function() {
 
         passage.text += '[[placeholder text|' + storyData[optinpath].choices[i].key + '|' + answers + ']] ';
       }
+    }
+
+    // Find additional editor-specific info under _twinedata
+    if (typeof storyData[optinpath]._twinedata !== 'undefined'
+        && typeof storyData[optinpath]._twinedata.pos !== 'undefined') {
+      passage.top = storyData[optinpath]._twinedata.pos.top;
+      passage.left = storyData[optinpath]._twinedata.pos.left;
     }
 
     return passage;
