@@ -127,21 +127,38 @@ var exportsms = function() {
       data[attrName] = attrs[i].value || 0;
     }
 
-    data.text = passage.innerText.trim();
+    data.text = passage.innerText.trim(); // Is this still necessary? 
 
-    strPos = attrs.getNamedItem('position') ? attrs.getNamedItem('position').value : '0,0';
-    pos = _getPositionFromString(strPos);
-
+    pos = _getPositionFromString(data.position);
     data._twinedata = {
-      storyconfig: {
-        pos: {
-          top: pos.top,
-          left: pos.left
-        }
-      }
-    };
+      pos: {
+        top: pos.top,
+        left: pos.left
+      },
+      text: passage.innerText.trim();
+    }
 
     return data;
+  }
+
+  /**
+   * Helper function to create a position object from a string.
+   *
+   * @param coordinates
+   *   String coordinates {left,top}
+   * @return object
+   */
+  function _getPositionFromString(coordinates) {
+    var pos = {top: 0, left: 0};
+    var comma = 0;
+
+    if (typeof coordinates === 'string') {
+      comma = coordinates.indexOf(',');
+      pos.left = coordinates.substring(0, comma);
+      pos.top = coordinates.substring(comma + 1);
+    }
+
+    return pos;
   }
 
   /**
@@ -153,21 +170,22 @@ var exportsms = function() {
   function _buildStoryConfig(passageData) {
     var data = {};
 
-    data.__comments =               passageData.description || '';
-    data.alpha_wait_oip =           passageData.alpha_wait_oip || 0;
-    data.alpha_start_ask_oip =      passageData.alpha_start_ask_oip || 0;
-    data.beta_join_ask_oip =        passageData.beta_join_ask_oip || 0;
-    data.beta_wait_oip =            passageData.beta_wait_oip || 0;
-    data.game_in_progress_oip =     passageData.game_in_progress_oip || 0;
+    data.__comments               = passageData.description || '';
+    data.alpha_wait_oip           = passageData.alpha_wait_oip || 0;
+    data.alpha_start_ask_oip      = passageData.alpha_start_ask_oip || 0;
+    data.beta_join_ask_oip        = passageData.beta_join_ask_oip || 0;
+    data.beta_wait_oip            = passageData.beta_wait_oip || 0;
+    data.game_in_progress_oip     = passageData.game_in_progress_oip || 0;
     data.game_ended_from_exit_oip = passageData.game_ended_from_exit_oip || 0;
-    data.story_start_oip =          passageData.story_start_oip || 0;
-    data.ask_solo_play =            passageData.ask_solo_play || 0;
+    data.story_start_oip          = passageData.story_start_oip || 0;
+    data.ask_solo_play            = passageData.ask_solo_play || 0;
 
     data.mobile_create = {};
-    data.mobile_create.ask_beta_1_oip =         passageData.mc_ask_beta_1_oip || 0;
-    data.mobile_create.ask_beta_2_oip =         passageData.mc_ask_beta_2_oip || 0;
-    data.mobile_create.invalid_mobile_oip =     passageData.mc_invalid_mobile_oip || 0;
+    data.mobile_create.ask_beta_1_oip         = passageData.mc_ask_beta_1_oip || 0;
+    data.mobile_create.ask_beta_2_oip         = passageData.mc_ask_beta_2_oip || 0;
+    data.mobile_create.invalid_mobile_oip     = passageData.mc_invalid_mobile_oip || 0;
     data.mobile_create.not_enough_players_oip = passageData.mc_not_enough_players_oip || 0;
+    data._twinedata                           = passageData._twinedata;
 
     strPos = attrs.getNamedItem('position') ? attrs.getNamedItem('position').value : '0,0';
     pos = _getPositionFromString(strPos);
@@ -239,17 +257,10 @@ var exportsms = function() {
           }
         }
 
-        // Store twine data to allow story to be imported properly
-        storyPassage._twinedata = {
-          pos: {
-            top: passage.top,
-            left: passage.left
-          },
-          text: passage.text
-        };
+        // Store twine spatial and text data to allow story to be imported properly
+        storyPassage._twinedata = passage._twinedata
 
-        // Add passage to the story with optinpath as its key
-        story[passage.optinpath.toString()] = storyPassage;
+        partialStory[passage.optinpath.toString()] = storyPassage;
       }
       else {
         error = 'Warning - multiple passageData with the same optinpath';
