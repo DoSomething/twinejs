@@ -98,10 +98,9 @@ var importsms = function() {
     }
 
     if ('_twinedata' in data
-        && 'storyconfig' in data._twinedata
-        && 'pos' in data._twinedata.storyconfig) {
-      passage.top = data._twinedata.storyconfig.pos.top;
-      passage.left = data._twinedata.storyconfig.pos.left;
+        && 'pos' in data._twinedata) {
+      passage.top = data._twinedata.pos.top;
+      passage.left = data._twinedata.pos.left;
     }
 
     return passage;

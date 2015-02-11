@@ -120,6 +120,7 @@ var exportsms = function() {
     var data = {}
       , attrs = passage.attributes
       , i
+      , pos
       ; 
 
     for (i = 0; i < attrs.length; i ++) {
@@ -135,7 +136,7 @@ var exportsms = function() {
         top: pos.top,
         left: pos.left
       },
-      text: passage.innerText.trim();
+      text: passage.innerText.trim()
     }
 
     return data;
@@ -186,11 +187,6 @@ var exportsms = function() {
     data.mobile_create.invalid_mobile_oip     = passageData.mc_invalid_mobile_oip || 0;
     data.mobile_create.not_enough_players_oip = passageData.mc_not_enough_players_oip || 0;
     data._twinedata                           = passageData._twinedata;
-
-    strPos = attrs.getNamedItem('position') ? attrs.getNamedItem('position').value : '0,0';
-    pos = _getPositionFromString(strPos);
-    data.top = pos.top;
-    data.left = pos.left;
 
     return data;
   }
