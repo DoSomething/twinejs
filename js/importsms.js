@@ -17,8 +17,8 @@ var importsms = function() {
    */
   function importStory(filename, strData) {
     var data,
-        allStories,
-        allPassages,
+        storyCollection,
+        passageCollection,
         story,
         storyConfig,
         pIndex,
@@ -28,11 +28,11 @@ var importsms = function() {
 
     data = JSON.parse(strData);
 
-    allStories = StoryCollection.all();
-    allPassages = PassageCollection.all();
+    storyCollection = new StoryCollection();
+    passageCollection = new PassageCollection();
 
     // Create story object
-    story = allStories.create({
+    story = storyCollection.create({
       name: filename
     }, {wait: true});
 
@@ -42,7 +42,7 @@ var importsms = function() {
     storyConfig.left = 0;
     storyConfig.top = 0;
 
-    allPassages.create(storyConfig, {wait: true});
+    passageCollection.create(storyConfig, {wait: true});
 
     // Parse through the "story" object
     keys = Object.keys(data.story)
@@ -65,7 +65,7 @@ var importsms = function() {
 
       for (pIndex in passages) {
         passages[pIndex].story = story.id;
-        allPassages.create(passages[pIndex], {wait: true});
+        passageCollection.create(passages[pIndex], {wait: true});
       }
     }
 
