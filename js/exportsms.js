@@ -70,6 +70,7 @@ var exportsms = function() {
     }
 
     // Combine JSON objects into config object.
+
     result = _merge(_buildRegularLevels(regularLevelData), _buildEndLevels(endLevelData));
     result = _merge(result, _buildEndGame(endGameData));
     result = { story: result }
@@ -277,7 +278,92 @@ var exportsms = function() {
    *   Object of end-level configuration objects. 
    */
   function _buildEndLevels(endLevelData) {
-    return {};
+    var i, 
+        j,
+        endLevelOutcome, 
+        partialStory,
+        passageDatum,
+        levelNumber,
+        configObject,
+        resultObject,
+        nameString,
+        endLevelGroupLink,
+        endLevelGroupKey,
+        endLevelGroupSuccessFailureStatus,
+        endLevelGroupConfigObject,
+        choice,
+        nextLevelLink,
+        nextLevelKey
+        ;
+
+    partialStory = {};
+
+    for (i = 0; i < endLevelData.length; i++) {
+      passageDatum = endLevelData[i]
+      levelNumber = passageDatum.name.match(/\d+/)[0] // Returns first number that appears in string.
+
+      // If this passageDatum is data from an individual end-level result passage
+      if (passageDatum.type == PassageEndLevelIndiv.prototype.defaults.type) {
+        nameString = "END-LEVEL" + levelNumber;
+        configObject = (partialStory[nameString] || { "choices": [] })
+
+        resultObject = {
+          "next" : parseInt(passageDatum.optinpath, 10),
+          "conditions" : {
+            "$and": [
+              passageDatum.name
+            ]
+          }
+        }
+
+        // Inserting this passageDatum's choice set information into the `choices` array of an `END-LEVELX` object.
+        configObject.choices.push(resultObject);
+        // And then, (re)inserting the `END-LEVELX` object into the partialStory object. 
+        partialStory[nameString] = configObject;
+
+        // For this END-LEVELX individual result, we're finding which END-LEVELX-GROUP result (SUCCESS or FAILURE) 
+        // it's linked to (and can produce), and adding the key of the individual result to the 'conditions' object of 
+        // that particular group result. OIP of that choice result will be populated when that group result passage is parsed. 
+        endLevelGroupLink = passageDatum.text.match(/\[\[.*?\]\]/g)[0];
+        endLevelGroupKey = endLevelGroupLink.replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$2');
+        endLevelGroupSuccessFailureStatus = endLevelGroupLink.toUpperCase().match(/(SUCCESS|FAILURE)/g)[0];
+        endLevelGroupConfigObject = (partialStory[nameString + "-GROUP"] || { "choices" : [ {"__comments": "SUCCESS"}, {"__comments": "FAILURE"} ], "next_level": 0 });
+
+        for (j = 0; j < endLevelGroupConfigObject.choices.length; j ++) {
+          choice = endLevelGroupConfigObject.choices[j];
+          // Matching the link contained within the end-level-individual passage to either the 'SUCCESS' or 'FAILURE' 
+          // END-LEVELX-GROUP choices
+          if (endLevelGroupSuccessFailureStatus == choice.__comments.toUpperCase()) {
+            if (!choice.conditions){
+              choice.conditions = { "$or" : [] };
+            }
+            choice.conditions["$or"].push({
+              "$and": [passageDatum.name] // Is the '$and' necessary, or can I just push the key in the '$or' array?
+            })
+            partialStory[nameString + "-GROUP"] = endLevelGroupConfigObject;
+            break;
+          }
+        }
+
+      }
+      // If this passageDatum is data from a group end-level result passage
+      else if (passageDatum.type == PassageEndLevelGroup.prototype.defaults.type) {
+        nameString = "END-LEVEL" + levelNumber + "-GROUP";
+        configObject = (partialStory[nameString] || { "choices" : [ {"__comments": "SUCCESS"}, {"__comments": "FAILURE"} ], "next_level": 0 });
+        endLevelGroupSuccessFailureStatus = passageDatum.name.toUpperCase().match(/(SUCCESS|FAILURE)/g)[0];
+        console.log(endLevelGroupSuccessFailureStatus, 'endLevelGroupSuccessFailureStatus')
+
+        for (j = 0; j < configObject.choices.length; j ++) {
+          choice = configObject.choices[j];
+          if (endLevelGroupSuccessFailureStatus == choice.__comments.toUpperCase() && !choice.next) {
+            choice.next = parseInt(passageDatum.optinpath, 10);
+            partialStory[nameString] = configObject;
+            break;
+          }
+        }
+      }
+    }
+    return partialStory;
   }
 
   /**
