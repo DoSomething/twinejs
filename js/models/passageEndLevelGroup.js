@@ -16,6 +16,7 @@ var PassageEndLevelGroup = Passage.extend({
              'position="<%- left %>,<%- top %>" ' +
              'optinpath="<%- optinpath %>" ' +
              'groupSuccessPath="<%- groupSuccessPath %>" ' +
+             '>' +
              '<%- text %></tw-passagedata>'),
 
   initialize: function() {
