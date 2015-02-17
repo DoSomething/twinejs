@@ -13,6 +13,7 @@ var PassageEndGameIndivRankResult = Passage.extend({
   },
 
   template: _.template('<tw-passagedata pid="<%- id %>" name="<%- name %>" ' +
+             'type="<%- type %>" ' +
              'position="<%- left %>,<%- top %>" ' +
              'optinpath="<%- optinpath %>" ' +
              'rank="<%- rank %>" ' +
@@ -34,6 +35,7 @@ var PassageEndGameIndivRankResult = Passage.extend({
       left: this.get('left'),
       top: this.get('top'),
       text: this.get('text'),
+      type: this.get('type'),
       optinpath: this.get('optinpath'),
       rank: this.get('rank')
     });

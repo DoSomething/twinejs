@@ -19,15 +19,18 @@ var exportsms = function() {
         story,
         children,
         passage,
+        passageData,
+        configData,
         tagName,
         passageType,
         i,
         j;
 
     var config = {},
-        passages = [],
-        result = {}
-        ;
+        regularLevelData = [],
+        endLevelData = [],
+        endGameData = [],
+        result = {};
 
     parsedObj = $.parseHTML(data);
     story = parsedObj[0];
@@ -37,16 +40,28 @@ var exportsms = function() {
       for (i = 0; i < children.length; i++) {
         // DOM element / passage data
         passage = children[i];
+        passageData = _extractHTMLData(passage);
 
         // Check tag name and passage type to determine how to process this data
         tagName = passage.tagName.toUpperCase();
-        passageType = passage.attributes.getNamedItem('type') ? passage.attributes.getNamedItem('type').value : '';
+        passageType = passageData.type;
 
         if (tagName == 'TW-PASSAGESTORYCONFIGDATA') {
-          config = _compileStoryConfig(passage.attributes);
+          configData = passageData;
         }
-        else if (tagName == 'TW-PASSAGEDATA' && passageType == PassageDS.prototype.defaults.type) {
-          passages.push(_compilePassage(passage));
+        else if (tagName == 'TW-PASSAGEDATA') {
+          if (passageType == PassageDS.prototype.defaults.type) {
+            regularLevelData.push(passageData);
+          }
+          else if (passageType == PassageEndLevelIndiv.prototype.defaults.type || 
+                   passageType == PassageEndLevelGroup.prototype.defaults.type) {
+            endLevelData.push(passageData);
+          }
+          else if (passageType == PassageEndGameIndivRankResult.prototype.defaults.type || 
+                   passageType == PassageEndGameIndivSuperlativeResult.prototype.defaults.type || 
+                   passageType == PassageEndGameGroupSuccessNumberResult.prototype.defaults.type) {
+            endGameData.push(passageData);
+          }
         }
         else {
           // Ignore data that isn't from a custom DS passage
@@ -54,9 +69,12 @@ var exportsms = function() {
       }
     }
 
-    // Display resulting JSON to the screen
-    result = _merge(result, config);
-    result = _merge(result, _buildStory(passages));
+    // Combine JSON objects into config object.
+
+    result = _merge(_buildRegularLevels(regularLevelData), _buildEndLevels(endLevelData));
+    result = _merge(result, _buildEndGame(endGameData));
+    result = { story: result }
+    result = _merge(result, _buildStoryConfig(configData));
 
     return result;
   }
@@ -93,79 +111,98 @@ var exportsms = function() {
   }
 
   /**
-   * Process data from a story config passage to the structure expected for the SMS game config.
-   *
-   * @param attrs NamedNodeMap of attributes from a DOM element
-   * @return Object
-   */
-  function _compileStoryConfig(attrs) {
-    var pos,
-        strPos,
-        data = {};
-
-    data.__comments               = attrs.getNamedItem('description') ? attrs.getNamedItem('description').value : '';
-    data.alpha_wait_oip           = attrs.getNamedItem('alpha_wait_oip') ? attrs.getNamedItem('alpha_wait_oip').value : 0;
-    data.alpha_start_ask_oip      = attrs.getNamedItem('alpha_start_ask_oip') ? attrs.getNamedItem('alpha_start_ask_oip').value : 0;
-    data.beta_join_ask_oip        = attrs.getNamedItem('beta_join_ask_oip') ? attrs.getNamedItem('beta_join_ask_oip').value : 0;
-    data.beta_wait_oip            = attrs.getNamedItem('beta_wait_oip') ? attrs.getNamedItem('beta_wait_oip').value : 0;
-    data.game_in_progress_oip     = attrs.getNamedItem('game_in_progress_oip') ? attrs.getNamedItem('game_in_progress_oip').value : 0;
-    data.game_ended_from_exit_oip = attrs.getNamedItem('game_ended_from_exit_oip') ? attrs.getNamedItem('game_ended_from_exit_oip').value : 0;
-    data.story_start_oip          = attrs.getNamedItem('story_start_oip') ? attrs.getNamedItem('story_start_oip').value : 0;
-    data.ask_solo_play            = attrs.getNamedItem('ask_solo_play') ? attrs.getNamedItem('ask_solo_play').value : 0;
-    data.mobile_create = {};
-    data.mobile_create.ask_beta_1_oip         = attrs.getNamedItem('mc_ask_beta_1_oip') ? attrs.getNamedItem('mc_ask_beta_1_oip').value : 0;
-    data.mobile_create.ask_beta_2_oip         = attrs.getNamedItem('mc_ask_beta_2_oip') ? attrs.getNamedItem('mc_ask_beta_2_oip').value : 0;
-    data.mobile_create.invalid_mobile_oip     = attrs.getNamedItem('mc_invalid_mobile_oip') ? attrs.getNamedItem('mc_invalid_mobile_oip').value : 0;
-    data.mobile_create.not_enough_players_oip = attrs.getNamedItem('mc_not_enough_players_oip') ? attrs.getNamedItem('mc_not_enough_players_oip').value : 0;
-
-    strPos = attrs.getNamedItem('position') ? attrs.getNamedItem('position').value : '0,0';
-    pos = _getPositionFromString(strPos);
-
-    data._twinedata = {
-      storyconfig: {
-        pos: {
-          top: pos.top,
-          left: pos.left
-        }
-      }
-    };
-
-    return data;
-  }
-
-  /**
    * Get passage data out of passage elements and return as an object with just the info we need.
    *
    * @param passage
    *   Passage data as an HTML tw-passagedata element
    * @return Object
    */
-  function _compilePassage(passage) {
-    var pos, strPos;
-    var data = {};
-    var attrs = passage.attributes;
+  function _extractHTMLData(passage) {
+    var data = {}
+      , attrs = passage.attributes
+      , i
+      , pos
+      ; 
 
-    data.optinpath = attrs.getNamedItem('optinpath') ? attrs.getNamedItem('optinpath').value : 0;
-    data.name = attrs.getNamedItem('name') ? attrs.getNamedItem('name').value : '';
+    for (i = 0; i < attrs.length; i ++) {
+      var attrName = attrs[i].name || 'undefinedAttribute' + i;
+      data[attrName] = attrs[i].value || 0;
+    }
+
     data.text = passage.innerText.trim();
 
-    strPos = attrs.getNamedItem('position') ? attrs.getNamedItem('position').value : '0,0';
-    pos = _getPositionFromString(strPos);
-    data.top = pos.top;
-    data.left = pos.left;
+    pos = _getPositionFromString(data.position);
+    data._twinedata = {
+      pos: {
+        top: pos.top,
+        left: pos.left
+      },
+      text: passage.innerText.trim()
+    }
 
     return data;
   }
 
   /**
-   * Build story config out of an array of passage data.
+   * Helper function to create a position object from a string.
    *
-   * @param passages
-   *   Array of passages in the story
-   * @return Story object
+   * @param coordinates
+   *   String coordinates {left,top}
+   * @return object
    */
-  function _buildStory(passages) {
-    var story,
+  function _getPositionFromString(coordinates) {
+    var pos = {top: 0, left: 0};
+    var comma = 0;
+
+    if (typeof coordinates === 'string') {
+      comma = coordinates.indexOf(',');
+      pos.left = coordinates.substring(0, comma);
+      pos.top = coordinates.substring(comma + 1);
+    }
+
+    return pos;
+  }
+
+  /**
+   * Process data from a story config passage to the structure expected for the SMS game config.
+   *
+   * @param attrs NamedNodeMap of attributes from a DOM element
+   * @return Object
+   */
+  function _buildStoryConfig(passageData) {
+    var data = {};
+
+    data.__comments               = passageData.description || '';
+    data.alpha_wait_oip           = passageData.alpha_wait_oip || 0;
+    data.alpha_start_ask_oip      = passageData.alpha_start_ask_oip || 0;
+    data.beta_join_ask_oip        = passageData.beta_join_ask_oip || 0;
+    data.beta_wait_oip            = passageData.beta_wait_oip || 0;
+    data.game_in_progress_oip     = passageData.game_in_progress_oip || 0;
+    data.game_ended_from_exit_oip = passageData.game_ended_from_exit_oip || 0;
+    data.story_start_oip          = passageData.story_start_oip || 0;
+    data.ask_solo_play            = passageData.ask_solo_play || 0;
+
+    data.mobile_create = {};
+    data.mobile_create.ask_beta_1_oip         = passageData.mc_ask_beta_1_oip || 0;
+    data.mobile_create.ask_beta_2_oip         = passageData.mc_ask_beta_2_oip || 0;
+    data.mobile_create.invalid_mobile_oip     = passageData.mc_invalid_mobile_oip || 0;
+    data.mobile_create.not_enough_players_oip = passageData.mc_not_enough_players_oip || 0;
+    data._twinedata                           = passageData._twinedata;
+
+    return data;
+  }
+
+  /**
+   * Assemble the game configuration document's normal level objects 
+   * (NOT end-level, or end-game) out of an array of passage data objects.
+   *
+   * @param passageData
+   *   Array of passageData
+   * @return partialStory
+   *   Object of normal level configuration objects. 
+   */
+  function _buildRegularLevels(passageData) {
+    var partialStory,
         storyPassage,
         passage,
         optinpath,
@@ -178,10 +215,11 @@ var exportsms = function() {
         j,
         k;
 
-    story = {};
-    for (i = 0; i < passages.length; i++) {
-      passage = passages[i];
-      if (typeof story[passage.optinpath.toString()] === 'undefined') {
+    partialStory = {};
+    for (i = 0; i < passageData.length; i++) {
+      passage = passageData[i];
+      // If the partialStory object doesn't already have the passage with this opt in path, then add it. 
+      if (typeof partialStory[passage.optinpath.toString()] === 'undefined') {
         storyPassage = {};
         storyPassage.name = passage.name;
         storyPassage.choices = [];
@@ -200,11 +238,11 @@ var exportsms = function() {
           storyPassage.choices[j].key = key;
           storyPassage.choices[j].valid_answers = [answers];
 
-          // To get the `next` optinpath, search through all passages to find the
+          // To get the `next` optinpath, search through all passageData to find the
           // passage.name that matches the key for this choice.
-          for (k = 0; k < passages.length; k++) {
-            if (passages[k].name == key) {
-              next = passages[k].optinpath;
+          for (k = 0; k < passageData.length; k++) {
+            if (passageData[k].name == key) {
+              next = passageData[k].optinpath;
               break;
             }
           }
@@ -216,25 +254,125 @@ var exportsms = function() {
           }
         }
 
-        // Store twine data to allow story to be imported properly
-        storyPassage._twinedata = {
-          pos: {
-            top: passage.top,
-            left: passage.left
-          },
-          text: passage.text
-        };
+        // Store twine spatial and text data to allow story to be imported properly
+        storyPassage._twinedata = passage._twinedata
 
-        // Add passage to the story with optinpath as its key
-        story[passage.optinpath.toString()] = storyPassage;
+        partialStory[passage.optinpath.toString()] = storyPassage;
       }
       else {
-        error = 'Warning - multiple passages with the same optinpath';
-        console.log(error);
+        error = 'Warning - multiple passageData with the same optinpath';
+        alert(error);
       }
     }
 
-    return {'story': story};
+    return partialStory;
+  }
+
+  /**
+   * Assemble the game configuration document's end-level objects 
+   * out of an array of passage data objects.
+   *
+   * @param passageData
+   *   Array of passageData
+   * @return Story
+   *   Object of end-level configuration objects. 
+   */
+  function _buildEndLevels(endLevelData) {
+    var i, 
+        j,
+        endLevelOutcome, 
+        partialStory,
+        passageDatum,
+        levelNumber,
+        configObject,
+        resultObject,
+        nameString,
+        endLevelGroupLink,
+        endLevelGroupKey,
+        endLevelGroupSuccessFailureStatus,
+        endLevelGroupConfigObject,
+        choice,
+        nextLevelLink,
+        nextLevelKey
+        ;
+
+    partialStory = {};
+
+    for (i = 0; i < endLevelData.length; i++) {
+      passageDatum = endLevelData[i]
+      levelNumber = passageDatum.name.match(/\d+/)[0] // Returns first number that appears in string.
+
+      // If this passageDatum is data from an individual end-level result passage
+      if (passageDatum.type == PassageEndLevelIndiv.prototype.defaults.type) {
+        nameString = "END-LEVEL" + levelNumber;
+        configObject = (partialStory[nameString] || { "choices": [] })
+
+        resultObject = {
+          "next" : parseInt(passageDatum.optinpath, 10),
+          "conditions" : {
+            "$and": [
+              passageDatum.name
+            ]
+          }
+        }
+
+        // Inserting this passageDatum's choice set information into the `choices` array of an `END-LEVELX` object.
+        configObject.choices.push(resultObject);
+        // And then, (re)inserting the `END-LEVELX` object into the partialStory object. 
+        partialStory[nameString] = configObject;
+
+        // For this END-LEVELX individual result, we're finding which END-LEVELX-GROUP result (SUCCESS or FAILURE) 
+        // it's linked to (and can produce), and adding the key of the individual result to the 'conditions' object of 
+        // that particular group result. OIP of that choice result will be populated when that group result passage is parsed. 
+        endLevelGroupLink = passageDatum.text.match(/\[\[.*?\]\]/g)[0];
+        endLevelGroupKey = endLevelGroupLink.replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$2');
+        endLevelGroupSuccessFailureStatus = endLevelGroupLink.toUpperCase().match(/(SUCCESS|FAILURE)/g)[0];
+        endLevelGroupConfigObject = (partialStory[nameString + "-GROUP"] || { "choices" : [ {"flag": "SUCCESS"}, {"flag": "FAILURE"} ], "next_level": 0 });
+
+        for (j = 0; j < endLevelGroupConfigObject.choices.length; j ++) {
+          choice = endLevelGroupConfigObject.choices[j];
+          // Matching the link contained within the end-level-individual passage to either the 'SUCCESS' or 'FAILURE' 
+          // END-LEVELX-GROUP choices
+          if (endLevelGroupSuccessFailureStatus == choice.flag.toUpperCase()) {
+            if (!choice.conditions){
+              choice.conditions = { "$or" : [] };
+            }
+            choice.conditions["$or"].push(passageDatum.name);
+            partialStory[nameString + "-GROUP"] = endLevelGroupConfigObject;
+            break;
+          }
+        }
+
+      }
+      // If this passageDatum is data from a group end-level result passage
+      else if (passageDatum.type == PassageEndLevelGroup.prototype.defaults.type) {
+        nameString = "END-LEVEL" + levelNumber + "-GROUP";
+        configObject = (partialStory[nameString] || { "choices" : [ {"flag": "SUCCESS"}, {"flag": "FAILURE"} ], "next_level": 0 });
+        endLevelGroupSuccessFailureStatus = passageDatum.name.toUpperCase().match(/(SUCCESS|FAILURE)/g)[0];
+        console.log(endLevelGroupSuccessFailureStatus, 'endLevelGroupSuccessFailureStatus')
+
+        for (j = 0; j < configObject.choices.length; j ++) {
+          choice = configObject.choices[j];
+          if (endLevelGroupSuccessFailureStatus == choice.flag.toUpperCase() && !choice.next) {
+            choice.next = parseInt(passageDatum.optinpath, 10);
+            partialStory[nameString] = configObject;
+            break;
+          }
+        }
+      }
+    }
+    return partialStory;
+  }
+
+  /**
+   * Assemble configuration objects out of an array of passage data.
+   *
+   * @param passages
+   *   Array of passages in the story
+   * @return Story object
+   */
+  function _buildEndGame(endGameData) {
+    return {};
   }
 
   return {

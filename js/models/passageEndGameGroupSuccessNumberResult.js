@@ -15,6 +15,7 @@ var PassageEndGameGroupSuccessNumberResult = Passage.extend({
   },
 
   template: _.template('<tw-passagedata pid="<%- id %>" name="<%- name %>" ' +
+             'type="<%- type %>" ' +
              'position="<%- left %>,<%- top %>" ' +
              'optinpath="<%- optinpath %>" ' +
              'minNumLevelSuccess="<%- minNumLevelSuccess %>" ' +
@@ -37,6 +38,7 @@ var PassageEndGameGroupSuccessNumberResult = Passage.extend({
       left: this.get('left'),
       top: this.get('top'),
       text: this.get('text'),
+      type: this.get('type'),
       optinpath: this.get('optinpath'),
       minNumLevelSuccess: this.get('minNumLevelSuccess'),
       maxNumLevelSuccess: this.get('maxNumLevelSuccess')
