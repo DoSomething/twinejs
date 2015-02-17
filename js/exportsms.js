@@ -129,7 +129,7 @@ var exportsms = function() {
       data[attrName] = attrs[i].value || 0;
     }
 
-    data.text = passage.innerText.trim(); // Is this still necessary? 
+    data.text = passage.innerText.trim();
 
     pos = _getPositionFromString(data.position);
     data._twinedata = {
@@ -327,19 +327,17 @@ var exportsms = function() {
         endLevelGroupLink = passageDatum.text.match(/\[\[.*?\]\]/g)[0];
         endLevelGroupKey = endLevelGroupLink.replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$2');
         endLevelGroupSuccessFailureStatus = endLevelGroupLink.toUpperCase().match(/(SUCCESS|FAILURE)/g)[0];
-        endLevelGroupConfigObject = (partialStory[nameString + "-GROUP"] || { "choices" : [ {"__comments": "SUCCESS"}, {"__comments": "FAILURE"} ], "next_level": 0 });
+        endLevelGroupConfigObject = (partialStory[nameString + "-GROUP"] || { "choices" : [ {"flag": "SUCCESS"}, {"flag": "FAILURE"} ], "next_level": 0 });
 
         for (j = 0; j < endLevelGroupConfigObject.choices.length; j ++) {
           choice = endLevelGroupConfigObject.choices[j];
           // Matching the link contained within the end-level-individual passage to either the 'SUCCESS' or 'FAILURE' 
           // END-LEVELX-GROUP choices
-          if (endLevelGroupSuccessFailureStatus == choice.__comments.toUpperCase()) {
+          if (endLevelGroupSuccessFailureStatus == choice.flag.toUpperCase()) {
             if (!choice.conditions){
               choice.conditions = { "$or" : [] };
             }
-            choice.conditions["$or"].push({
-              "$and": [passageDatum.name] // Is the '$and' necessary, or can I just push the key in the '$or' array?
-            })
+            choice.conditions["$or"].push(passageDatum.name);
             partialStory[nameString + "-GROUP"] = endLevelGroupConfigObject;
             break;
           }
@@ -349,13 +347,13 @@ var exportsms = function() {
       // If this passageDatum is data from a group end-level result passage
       else if (passageDatum.type == PassageEndLevelGroup.prototype.defaults.type) {
         nameString = "END-LEVEL" + levelNumber + "-GROUP";
-        configObject = (partialStory[nameString] || { "choices" : [ {"__comments": "SUCCESS"}, {"__comments": "FAILURE"} ], "next_level": 0 });
+        configObject = (partialStory[nameString] || { "choices" : [ {"flag": "SUCCESS"}, {"flag": "FAILURE"} ], "next_level": 0 });
         endLevelGroupSuccessFailureStatus = passageDatum.name.toUpperCase().match(/(SUCCESS|FAILURE)/g)[0];
         console.log(endLevelGroupSuccessFailureStatus, 'endLevelGroupSuccessFailureStatus')
 
         for (j = 0; j < configObject.choices.length; j ++) {
           choice = configObject.choices[j];
-          if (endLevelGroupSuccessFailureStatus == choice.__comments.toUpperCase() && !choice.next) {
+          if (endLevelGroupSuccessFailureStatus == choice.flag.toUpperCase() && !choice.next) {
             choice.next = parseInt(passageDatum.optinpath, 10);
             partialStory[nameString] = configObject;
             break;
