@@ -5,6 +5,8 @@
 
 'use strict';
 
+var TOTAL_NUMBER_OF_LEVELS = 6;
+
 var exportsms = function() {
 
   /**
@@ -69,14 +71,10 @@ var exportsms = function() {
       }
     }
 
-    // Combine JSON objects into config object.
-
-    result = _merge(_buildRegularLevels(regularLevelData), _buildEndLevels(endLevelData));
-    result = _merge(result, _buildEndGame(endGameData));
-    result = { story: result }
-    result = _merge(result, _buildStoryConfig(configData));
-
-    return result;
+    config = _buildRegularLevels(regularLevelData, config);
+    config = _buildEndLevels(endLevelData, config);
+    config = _buildEndGame(endGameData, config);
+    return config;
   }
 
   /**
@@ -198,10 +196,12 @@ var exportsms = function() {
    *
    * @param passageData
    *   Array of passageData
+   * @param config
+   *   Unfinished config object we're in the process of building. 
    * @return partialStory
    *   Object of normal level configuration objects. 
    */
-  function _buildRegularLevels(passageData) {
+  function _buildRegularLevels(passageData, config) {
     var partialStory,
         storyPassage,
         passage,
@@ -215,13 +215,20 @@ var exportsms = function() {
         j,
         k;
 
-    partialStory = {};
+
+    if (config.story) {
+      partialStory = config.story;
+    } 
+    else {
+      partialStory = {};
+    }
+
     for (i = 0; i < passageData.length; i++) {
       passage = passageData[i];
       // If the partialStory object doesn't already have the passage with this opt in path, then add it. 
       if (typeof partialStory[passage.optinpath.toString()] === 'undefined') {
         storyPassage = {};
-        storyPassage.name = passage.name;
+        storyPassage.key = passage.name;
         storyPassage.choices = [];
 
         // Find links in the text
@@ -265,7 +272,9 @@ var exportsms = function() {
       }
     }
 
-    return partialStory;
+    config.story = partialStory;
+
+    return config;
   }
 
   /**
@@ -274,12 +283,15 @@ var exportsms = function() {
    *
    * @param passageData
    *   Array of passageData
+   * @param config
+   *   Unfinished config object we're in the process of building. 
    * @return Story
    *   Object of end-level configuration objects. 
    */
-  function _buildEndLevels(endLevelData) {
+  function _buildEndLevels(endLevelData, config) {
     var i, 
         j,
+        k,
         endLevelOutcome, 
         partialStory,
         passageDatum,
@@ -292,11 +304,21 @@ var exportsms = function() {
         endLevelGroupSuccessFailureStatus,
         endLevelGroupConfigObject,
         choice,
+        nextLevelString,
         nextLevelLink,
-        nextLevelKey
+        nextLevelKey,
+        nextLevelNumber,
+        storyNode,
+        keyArray,
+        testKey
         ;
 
-    partialStory = {};
+    if (config.story) {
+      partialStory = config.story;
+    } 
+    else {
+      partialStory = {};
+    }
 
     for (i = 0; i < endLevelData.length; i++) {
       passageDatum = endLevelData[i]
@@ -355,13 +377,35 @@ var exportsms = function() {
           choice = configObject.choices[j];
           if (endLevelGroupSuccessFailureStatus == choice.flag.toUpperCase() && !choice.next) {
             choice.next = parseInt(passageDatum.optinpath, 10);
-            partialStory[nameString] = configObject;
             break;
           }
         }
+
+        nextLevelNumber = parseInt(levelNumber, 10) + 1;
+        if (nextLevelNumber <= TOTAL_NUMBER_OF_LEVELS) {
+          nextLevelString = 'L' + nextLevelNumber + '0';
+          for (storyNode in config.story) {
+            // Implementing a best practice: when iterating through an object's properties, it's possible to include inherited properties. We check with .hasOwnProperty
+            if (config.story.hasOwnProperty(storyNode) && config.story[storyNode].key == nextLevelString) {
+              keyArray = Object.keys(config.story);
+              for (k = 0; k < keyArray.length; k ++) {
+                testKey = keyArray[k];
+                if (config.story[testKey].key == nextLevelString) {
+                  configObject.next_level = keyArray[k];
+                  break;
+                }
+              }
+            }
+          }
+        } else {
+          configObject.next_level = 'END-GAME';
+        }
+
+        partialStory[nameString] = configObject;
       }
     }
-    return partialStory;
+    config.story = partialStory;
+    return config;
   }
 
   /**
@@ -369,10 +413,12 @@ var exportsms = function() {
    *
    * @param passages
    *   Array of passages in the story
+   * @param config
+   *   Unfinished config object we're in the process of building. 
    * @return Story object
    */
-  function _buildEndGame(endGameData) {
-    return {};
+  function _buildEndGame(endGameData, config) {
+    return config;
   }
 
   return {
