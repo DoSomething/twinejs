@@ -73,7 +73,7 @@ var exportsms = function() {
 
     config = _buildRegularLevels(regularLevelData, config);
     config = _buildEndLevels(endLevelData, config);
-    config = _buildEndGame(endGameData, config);
+    config = _buildEndGame(endLevelData, endGameData, config);
     return config;
   }
 
@@ -313,14 +313,14 @@ var exportsms = function() {
         testKey
         ;
 
-    if (config.story) {
+
+    for (i = 0; i < endLevelData.length; i++) {    if (config.story) {
       partialStory = config.story;
     } 
     else {
       partialStory = {};
     }
 
-    for (i = 0; i < endLevelData.length; i++) {
       passageDatum = endLevelData[i]
       levelNumber = passageDatum.name.match(/\d+/)[0] // Returns first number that appears in string.
 
@@ -371,7 +371,6 @@ var exportsms = function() {
         nameString = "END-LEVEL" + levelNumber + "-GROUP";
         configObject = (partialStory[nameString] || { "choices" : [ {"flag": "SUCCESS"}, {"flag": "FAILURE"} ], "next_level": 0 });
         endLevelGroupSuccessFailureStatus = passageDatum.name.toUpperCase().match(/(SUCCESS|FAILURE)/g)[0];
-        console.log(endLevelGroupSuccessFailureStatus, 'endLevelGroupSuccessFailureStatus')
 
         for (j = 0; j < configObject.choices.length; j ++) {
           choice = configObject.choices[j];
@@ -417,7 +416,118 @@ var exportsms = function() {
    *   Unfinished config object we're in the process of building. 
    * @return Story object
    */
-  function _buildEndGame(endGameData, config) {
+  function _buildEndGame(endLevelData, endGameData, config) {
+    var endGameObject,
+        endGameDatum,
+        endLevelDatum,
+        i,
+        j,
+        k,
+        l,
+        m,
+        n,
+        p,
+        q,
+        superlativeArray,
+        rank,
+        oip,
+        choiceObject
+        ;
+
+    endGameObject = {
+      "__comments": "",
+      "indiv-message-end-game-format": "",
+      "group-message-end-game-format": "",
+      "choices": [], // Bully Text format-specific, populated by both endLevelData and endGameData - indivSuperlativePath property in passageEndLevelIndiv, 
+      "group-level-success-oips": [], // Science Sleuth format-specific, populated by endLevelData - groupLevelSuccessOips property in passageEndLevelIndiv
+      "group-success-failure-oips": { // Science Sleuth format-specific, populated by endGameData - minNumLevelSuccess, maxNumLevelSuccess, optinpath properties of passageEndGameGroupSuccessNumberResult
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null
+      },
+      "indiv-level-success-oips": [], // Science Sleuth format-specific, populated by endLevelData - indivSuccessPath property in passageEndLevelIndiv
+      "indiv-rank-oips": { // Science Sleuth format-specific, populated by endGameData - rank property in passageEndGameIndivRankResult.js
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "1-tied": null,
+        "2-tied": null
+      }
+    };
+
+    // We also want to iterate through all the endGameData to populate the rest 2) science sleuth indiv rankings, 3) bully text superlatives
+
+    for (j = 0; j < endGameData.length; j++) {
+      endGameDatum = endGameData[j];
+      // If the game data object is from a PassageEndGameIndivResult object 
+      if (endGameDatum.type === 'PassageEndGameIndivRankResult') {
+        rank = endGameDatum.rank;
+        oip = endGameDatum.optinpath;
+        endGameObject["indiv-rank-oips"][rank] = oip;
+      }
+      // If the game data object is from a PassageEndGameIndivSuperlativeResult
+      else if (endGameDatum.type === 'PassageEndGameIndivSuperlativeResult') {
+        superlative = endGameDatum.pathFlag;
+        for (k = 0; k < endGameObject.choices.length; k++) {
+          if (endGameObject.choices[k].flag == superlative) {
+            choiceObject = endGameObject.choices[k];
+          }
+        }
+        if (!choiceObject || (choiceObject.flag != superlative)) {
+          choiceObject = {
+            "next" : '',
+            "flag" : '',
+            "conditions" : {
+              "$and": []
+            }
+          }
+        }
+        choiceObject.next = endGameDatum.optinpath;
+        choiceObject.flag = superlative;
+        endGameObject.choices.push(choiceObject);
+      }
+
+      else if (endGameDatum.type === 'PassageEndGameGroupSuccessNumberResult') {
+        min = parseInt(endGameDatum.minNumLevelSuccess);
+        max = parseInt(endGameDatum.maxNumLevelSuccess);
+        for (l = min; l <= max; l++) {
+          endGameObject["group-success-failure-oips"][l] = endGameDatum.optinpath;
+        }
+      }
+    }
+
+    // We want to iterate through all the 1) endLevelData to build indiv superlative endgame logic, as well as 2) indiv ranking endgame logic, and 3) group success/failure science sleuth game logic. We collect those flags, collect their opt in paths and shove them in an array. 
+    for (i = 0; i < endLevelData.length; i++) {
+      endLevelDatum = endLevelData[i];
+      // If the game data object is from a PassageEndLevelIndiv object
+      if (endLevelDatum.type === 'passageEndLevelIndiv') {
+        if (endLevelDatum.indivSuccessPath == 'true') { // What does this property get expressed as? 
+          endGameObject["indiv-level-success-oips"].push(endLevelDatum.optinpath); // Are we going to need to parseInt() this? 
+        } 
+        else if (endLevelDatum.indivSuperlativePath) {
+          superlativeArray = endLevelDatum.indivSuperlativePath.split(/[ ,]+/);
+          for (p = 0; p < superlativeArray.length; p++) {
+            if (superlativeArray[p]) { // Warding off empty strings. 
+              for (q = 0; q < endGameObject.choices.length; q++) {
+                if (endGameObject.choices[q].flag == superlativeArray[p]) {
+                  endGameObject.choices[q].conditions["$and"].push(endLevelDatum.name);
+                }
+              }
+            }
+          }
+        }
+      } 
+      // If the game data object is from a PassageEndLevelGroup object
+      else if (endLevelDatum.type === 'passageEndLevelGroup') {
+        endGameObject["group-level-success-oips"].push(endLevelDatum.optinpath);
+      }
+    }
+    config.story["END-GAME"] = endGameObject;
     return config;
   }
 
