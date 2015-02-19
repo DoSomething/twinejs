@@ -175,6 +175,7 @@ var TwineApp = Backbone.Marionette.Application.extend(
   importFile: function (data)
   {
     var selectors = this.selectors;
+    var createPassage = this.createPassage;
 
     // containers for the new stories and passages we will create
     var allStories = StoryCollection.all();
@@ -206,29 +207,26 @@ var TwineApp = Backbone.Marionette.Application.extend(
       }, { wait: true });
 
       // and child passages
-      
-      $story.find(selectors.passageData).each(function()
-      {
+
+      var createPassagesFromData = function() {
         var $passage = $(this);
         var id = $passage.attr('pid');
         var pos = $passage.attr('position');
         var posBits = pos.split(',');
-        var tags = $passage.attr('tags').trim();
+        var tags = $passage.attr('tags') ? $passage.attr('tags').trim() : "";
         tags = tags === "" ? [] : tags.split(/\s+/);
 
-        var passage = allPassages.create(
-        {
-          name: $passage.attr('name'),
-          tags: tags,
-          text: $passage.text(),
-          story: story.id,
-          left: parseInt(posBits[0]),
-          top: parseInt(posBits[1])
-        }, { wait: true }); 
+        var passageObj = createPassage($passage, story.id);
 
-        if (id == startPassageId)
-          story.save({ startPassage: passage.id });
-      });
+        var passageModel = allPassages.create(passageObj, { wait: true });
+
+        if (id == startPassageId) {
+          story.save({ startPassage: passageModel.id });
+        }
+      };
+
+      $story.find(selectors.storyConfigData).each(createPassagesFromData);
+      $story.find(selectors.passageData).each(createPassagesFromData);
 
       // for now, glom all style nodes into the stylesheet property
 
@@ -255,6 +253,81 @@ var TwineApp = Backbone.Marionette.Application.extend(
     });
 
     return count;
+  },
+
+  /**
+   * Create passage objects from attributes pulled from parsed HTML. 
+   *
+   * @param $passage
+   *   Passage jQuery object parsed from HTML
+   * @param storyId
+   *   Story ID this passage belongs to
+   * @return Passage object
+   */
+  createPassage: function($passage, storyId) {
+    if (!$passage) {
+      return null;
+    }
+
+    var buildPassage = function(properties) {
+      var i,
+          key,
+          keys,
+          result = {};
+
+      keys = Object.keys(properties);
+      for (i = 0; i < keys.length; i++) {
+        key = keys[i];
+        result[key] = $passage.attr(key);
+      }
+
+      return result;
+    };
+
+    var p,
+        id,
+        pos,
+        posBits,
+        tags,
+        type,
+        model,
+        models;
+
+    p = {};
+
+    models = [
+      Passage.prototype.defaults,
+      PassageStoryConfig.prototype.defaults,
+      PassageDS.prototype.defaults,
+      PassageEndLevelIndiv.prototype.defaults,
+      PassageEndLevelGroup.prototype.defaults,
+      PassageEndGameIndivRankResult.prototype.defaults,
+      PassageEndGameIndivSuperlativeResult.prototype.defaults,
+      PassageEndGameGroupSuccessNumberResult.prototype.defaults
+    ];
+
+    for (var i = 0; i < models.length; i++) {
+      model = models[i];
+      if ($passage.attr('type') == model.type) {
+        p = buildPassage(model);
+        break;
+      }
+    }
+
+    id = $passage.attr('pid');
+    pos = $passage.attr('position');
+    posBits = pos.split(',');
+    tags = $passage.attr('tags') ? $passage.attr('tags').trim() : "";
+    tags = tags === "" ? [] : tags.split(/\s+/);
+
+    p.name = $passage.attr('name');
+    p.tags = tags;
+    p.text = $passage.text();
+    p.story = storyId;
+    p.left = parseInt(posBits[0]);
+    p.top = parseInt(posBits[1]);
+
+    return p;
   },
 
   /**
