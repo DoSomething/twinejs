@@ -25,8 +25,7 @@ var exportsms = function() {
         configData,
         tagName,
         passageType,
-        i,
-        j;
+        i,j;
 
     var config = {},
         regularLevelData = [],
@@ -211,9 +210,7 @@ var exportsms = function() {
         answers,
         next,
         error,
-        i,
-        j,
-        k;
+        i,j,k;
 
 
     if (config.story) {
@@ -289,9 +286,7 @@ var exportsms = function() {
    *   Object of end-level configuration objects. 
    */
   function _buildEndLevels(endLevelData, config) {
-    var i, 
-        j,
-        k,
+    var i,j,k,
         endLevelOutcome, 
         partialStory,
         passageDatum,
@@ -420,15 +415,11 @@ var exportsms = function() {
     var endGameObject,
         endGameDatum,
         endLevelDatum,
-        i,
-        j,
-        k,
-        l,
-        m,
-        n,
-        p,
-        q,
+        i,j,k,l,m,n,p,q,
+        min, 
+        max,
         superlativeArray,
+        superlative,
         rank,
         oip,
         choiceObject
@@ -438,9 +429,9 @@ var exportsms = function() {
       "__comments": "",
       "indiv-message-end-game-format": "",
       "group-message-end-game-format": "",
-      "choices": [], // Bully Text format-specific, populated by both endLevelData and endGameData - indivSuperlativePath property in passageEndLevelIndiv, 
-      "group-level-success-oips": [], // Science Sleuth format-specific, populated by endLevelData - groupLevelSuccessOips property in passageEndLevelIndiv
-      "group-success-failure-oips": { // Science Sleuth format-specific, populated by endGameData - minNumLevelSuccess, maxNumLevelSuccess, optinpath properties of passageEndGameGroupSuccessNumberResult
+      "choices": [],
+      "group-level-success-oips": [],
+      "group-success-failure-oips": {
         "0": null,
         "1": null,
         "2": null,
@@ -449,8 +440,8 @@ var exportsms = function() {
         "5": null,
         "6": null
       },
-      "indiv-level-success-oips": [], // Science Sleuth format-specific, populated by endLevelData - indivSuccessPath property in passageEndLevelIndiv
-      "indiv-rank-oips": { // Science Sleuth format-specific, populated by endGameData - rank property in passageEndGameIndivRankResult.js
+      "indiv-level-success-oips": [],
+      "indiv-rank-oips": {
         "1": null,
         "2": null,
         "3": null,
@@ -460,24 +451,24 @@ var exportsms = function() {
       }
     };
 
-    // We also want to iterate through all the endGameData to populate the rest 2) science sleuth indiv rankings, 3) bully text superlatives
-
+    // Iterating through all the endgame data.
     for (j = 0; j < endGameData.length; j++) {
       endGameDatum = endGameData[j];
-      // If the game data object is from a PassageEndGameIndivResult object 
-      if (endGameDatum.type === 'PassageEndGameIndivRankResult') {
+      // Storing oip for an individual rank result.
+      if (endGameDatum.type === 'passageEndGameIndivRankResult') {
         rank = endGameDatum.rank;
         oip = endGameDatum.optinpath;
         endGameObject["indiv-rank-oips"][rank] = oip;
       }
-      // If the game data object is from a PassageEndGameIndivSuperlativeResult
-      else if (endGameDatum.type === 'PassageEndGameIndivSuperlativeResult') {
-        superlative = endGameDatum.pathFlag;
+      // Storing oip for an individual superlative result, and setting up the logic choice object. 
+      else if (endGameDatum.type === 'passageEndGameIndivSuperlativeResult') {
+        superlative = endGameDatum.pathflag;
         for (k = 0; k < endGameObject.choices.length; k++) {
           if (endGameObject.choices[k].flag == superlative) {
             choiceObject = endGameObject.choices[k];
           }
         }
+        // Checking that choiceObject doesn't exist or that the namespace isn't already taken by something irrelevant. 
         if (!choiceObject || (choiceObject.flag != superlative)) {
           choiceObject = {
             "next" : '',
@@ -492,25 +483,27 @@ var exportsms = function() {
         endGameObject.choices.push(choiceObject);
       }
 
-      else if (endGameDatum.type === 'PassageEndGameGroupSuccessNumberResult') {
-        min = parseInt(endGameDatum.minNumLevelSuccess);
-        max = parseInt(endGameDatum.maxNumLevelSuccess);
+      // Retrieving oip for a group success number result. 
+      else if (endGameDatum.type === 'passageEndGameGroupSuccessNumberResult') {
+        min = parseInt(endGameDatum.minnumlevelsuccess);
+        max = parseInt(endGameDatum.maxnumlevelsuccess);
         for (l = min; l <= max; l++) {
           endGameObject["group-success-failure-oips"][l] = endGameDatum.optinpath;
         }
       }
     }
 
-    // We want to iterate through all the 1) endLevelData to build indiv superlative endgame logic, as well as 2) indiv ranking endgame logic, and 3) group success/failure science sleuth game logic. We collect those flags, collect their opt in paths and shove them in an array. 
+    // Iterating through all the endlevel data. 
     for (i = 0; i < endLevelData.length; i++) {
       endLevelDatum = endLevelData[i];
-      // If the game data object is from a PassageEndLevelIndiv object
       if (endLevelDatum.type === 'passageEndLevelIndiv') {
-        if (endLevelDatum.indivSuccessPath == 'true') { // What does this property get expressed as? 
-          endGameObject["indiv-level-success-oips"].push(endLevelDatum.optinpath); // Are we going to need to parseInt() this? 
-        } 
-        else if (endLevelDatum.indivSuperlativePath) {
-          superlativeArray = endLevelDatum.indivSuperlativePath.split(/[ ,]+/);
+        // Storing oip of an individual success level. Used to calculate endgame result of rank among others. 
+        if (endLevelDatum.indivsuccesspath == 'true') {
+          endGameObject["indiv-level-success-oips"].push(endLevelDatum.optinpath);
+        }
+        // Storing the key of a passage which a user must traverse in order to receive a specific superlative endgame result. 
+        if (endLevelDatum.indivsuperlativepath) {
+          superlativeArray = endLevelDatum.indivsuperlativepath.split(/[ ,]+/);
           for (p = 0; p < superlativeArray.length; p++) {
             if (superlativeArray[p]) { // Warding off empty strings. 
               for (q = 0; q < endGameObject.choices.length; q++) {
@@ -522,8 +515,8 @@ var exportsms = function() {
           }
         }
       } 
-      // If the game data object is from a PassageEndLevelGroup object
-      else if (endLevelDatum.type === 'passageEndLevelGroup') {
+      // Storing the oip of the end level passages which convey a group's success. Used to calculate the group success/failure endgame result. 
+      else if (endLevelDatum.type === 'passageEndLevelGroup' && endLevelDatum.groupsuccesspath == 'true') {
         endGameObject["group-level-success-oips"].push(endLevelDatum.optinpath);
       }
     }
