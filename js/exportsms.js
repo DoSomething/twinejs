@@ -25,8 +25,7 @@ var exportsms = function() {
         configData,
         tagName,
         passageType,
-        i,
-        j;
+        i,j;
 
     var config = {},
         regularLevelData = [],
@@ -73,7 +72,7 @@ var exportsms = function() {
 
     config = _buildRegularLevels(regularLevelData, config);
     config = _buildEndLevels(endLevelData, config);
-    config = _buildEndGame(endGameData, config);
+    config = _buildEndGame(endLevelData, endGameData, config);
     return config;
   }
 
@@ -211,9 +210,7 @@ var exportsms = function() {
         answers,
         next,
         error,
-        i,
-        j,
-        k;
+        i,j,k;
 
 
     if (config.story) {
@@ -289,9 +286,7 @@ var exportsms = function() {
    *   Object of end-level configuration objects. 
    */
   function _buildEndLevels(endLevelData, config) {
-    var i, 
-        j,
-        k,
+    var i,j,k,
         endLevelOutcome, 
         partialStory,
         passageDatum,
@@ -313,14 +308,15 @@ var exportsms = function() {
         testKey
         ;
 
-    if (config.story) {
+
+    for (i = 0; i < endLevelData.length; i++) {    
+      if (config.story) {
       partialStory = config.story;
     } 
     else {
       partialStory = {};
     }
 
-    for (i = 0; i < endLevelData.length; i++) {
       passageDatum = endLevelData[i]
       levelNumber = passageDatum.name.match(/\d+/)[0] // Returns first number that appears in string.
 
@@ -371,7 +367,6 @@ var exportsms = function() {
         nameString = "END-LEVEL" + levelNumber + "-GROUP";
         configObject = (partialStory[nameString] || { "choices" : [ {"flag": "SUCCESS"}, {"flag": "FAILURE"} ], "next_level": 0 });
         endLevelGroupSuccessFailureStatus = passageDatum.name.toUpperCase().match(/(SUCCESS|FAILURE)/g)[0];
-        console.log(endLevelGroupSuccessFailureStatus, 'endLevelGroupSuccessFailureStatus')
 
         for (j = 0; j < configObject.choices.length; j ++) {
           choice = configObject.choices[j];
@@ -417,7 +412,116 @@ var exportsms = function() {
    *   Unfinished config object we're in the process of building. 
    * @return Story object
    */
-  function _buildEndGame(endGameData, config) {
+  function _buildEndGame(endLevelData, endGameData, config) {
+    var endGameObject,
+        endGameDatum,
+        endLevelDatum,
+        i,j,k,
+        min, 
+        max,
+        superlativeArray,
+        superlative,
+        rank,
+        oip,
+        choiceObject
+        ;
+
+    endGameObject = {
+      "__comments": "",
+      "indiv-message-end-game-format": "",
+      "group-message-end-game-format": "",
+      "choices": [],
+      "group-level-success-oips": [],
+      "group-success-failure-oips": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null
+      },
+      "indiv-level-success-oips": [],
+      "indiv-rank-oips": {
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "1-tied": null,
+        "2-tied": null
+      }
+    };
+
+    // Iterating through all the endgame data.
+    for (i = 0; i < endGameData.length; i++) {
+      endGameDatum = endGameData[i];
+      // Storing oip for an individual rank result.
+      if (endGameDatum.type === PassageEndGameIndivRankResult.prototype.defaults.type) {
+        rank = endGameDatum.rank;
+        oip = endGameDatum.optinpath;
+        endGameObject["indiv-rank-oips"][rank] = oip;
+      }
+      // Storing oip for an individual superlative result, and setting up the logic choice object. 
+      else if (endGameDatum.type === PassageEndGameIndivSuperlativeResult.prototype.defaults.type) {
+        superlative = endGameDatum.pathflag;
+        for (j = 0; j < endGameObject.choices.length; j++) {
+          if (endGameObject.choices[j].flag == superlative) {
+            choiceObject = endGameObject.choices[j];
+          }
+        }
+        // Checking that choiceObject doesn't exist or that the namespace isn't already taken by something irrelevant. 
+        if (!choiceObject || (choiceObject.flag != superlative)) {
+          choiceObject = {
+            "next" : '',
+            "flag" : '',
+            "conditions" : {
+              "$and": []
+            }
+          }
+        }
+        choiceObject.next = endGameDatum.optinpath;
+        choiceObject.flag = superlative;
+        endGameObject.choices.push(choiceObject);
+      }
+
+      // Retrieving oip for a group success number result. 
+      else if (endGameDatum.type === PassageEndGameGroupSuccessNumberResult.prototype.defaults.type) {
+        min = parseInt(endGameDatum.minnumlevelsuccess);
+        max = parseInt(endGameDatum.maxnumlevelsuccess);
+        for (k = min; k <= max; k++) {
+          endGameObject["group-success-failure-oips"][k] = endGameDatum.optinpath;
+        }
+      }
+    }
+
+    // Iterating through all the endlevel data. 
+    for (i = 0; i < endLevelData.length; i++) {
+      endLevelDatum = endLevelData[i];
+      if (endLevelDatum.type === 'passageEndLevelIndiv') {
+        // Storing oip of an individual success level. Used to calculate endgame result of rank among others. 
+        if (endLevelDatum.indivsuccesspath == 'true') {
+          endGameObject["indiv-level-success-oips"].push(endLevelDatum.optinpath);
+        }
+        // Storing the key of a passage which a user must traverse in order to receive a specific superlative endgame result. 
+        if (endLevelDatum.indivsuperlativepath) {
+          superlativeArray = endLevelDatum.indivsuperlativepath.split(/[ ,]+/);
+          for (j = 0; j < superlativeArray.length; j++) {
+            if (superlativeArray[j]) { // Warding off empty strings. 
+              for (k = 0; k < endGameObject.choices.length; k++) {
+                if (endGameObject.choices[k].flag == superlativeArray[j]) {
+                  endGameObject.choices[k].conditions["$and"].push(endLevelDatum.name);
+                }
+              }
+            }
+          }
+        }
+      } 
+      // Storing the oip of the end level passages which convey a group's success. Used to calculate the group success/failure endgame result. 
+      else if (endLevelDatum.type === 'passageEndLevelGroup' && endLevelDatum.groupsuccesspath == 'true') {
+        endGameObject["group-level-success-oips"].push(endLevelDatum.optinpath);
+      }
+    }
+    config.story["END-GAME"] = endGameObject;
     return config;
   }
 
