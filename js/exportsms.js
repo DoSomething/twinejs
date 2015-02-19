@@ -423,7 +423,9 @@ var exportsms = function() {
         superlative,
         rank,
         oip,
-        choiceObject
+        choiceObject,
+        endgameIndivFormatSet,
+        endgameGroupFormatSet
         ;
 
     endGameObject = {
@@ -521,6 +523,32 @@ var exportsms = function() {
         endGameObject["group-level-success-oips"].push(endLevelDatum.optinpath);
       }
     }
+
+    endgameIndivFormatSet = false;
+    endgameGroupFormatSet = false;
+
+    // Adding flags. 
+    if (!isEmpty(endGameObject["indiv-rank-oips"]) && endGameObject["indiv-level-success-oips"].length > 0) {
+      endGameObject["indiv-message-end-game-format"] = "rankings-within-group-based";
+      endgameIndivFormatSet = true;
+    }
+
+    if (endGameObject.choices.length > 0) {
+      if (endgameIndivFormatSet) {
+        alert('You\'re trying to enter more than one individual message end game format! This needs to be fixed.');
+      }
+      endGameObject["indiv-message-end-game-format"] = "individual-decision-based";
+      endgameIndivFormatSet = true;
+    }
+
+    if (!isEmpty(endGameObject["group-success-failure-oips"]) && endGameObject["group-level-success-oips"].length > 0) {
+      endGameObject["group-message-end-game-format"] = "group-success-failure-based";
+      endgameGroupFormatSet = true;
+    }
+
+    if (!endgameIndivFormatSet) { alert('No individual endgame result format set!'); }
+    if (!endgameGroupFormatSet) { alert('No group endgame result format set!'); }
+
     config.story["END-GAME"] = endGameObject;
     return config;
   }
@@ -528,5 +556,9 @@ var exportsms = function() {
   return {
     format: format
   };
+
+  function isEmpty(obj){
+    return Object.keys(obj).length === 0;
+  }
 
 }();
