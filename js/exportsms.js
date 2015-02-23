@@ -70,6 +70,7 @@ var exportsms = function() {
       }
     }
 
+    config = _buildStoryConfig(configData, config)
     config = _buildRegularLevels(regularLevelData, config);
     config = _buildEndLevels(endLevelData, config);
     config = _buildEndGame(endLevelData, endGameData, config);
