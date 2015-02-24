@@ -14,6 +14,7 @@ StoryEditView.PassageStoryConfigEditor = Backbone.View.extend({
     this.$('.passageId').val(this.model.id);
     this.$('.passageName').val('Story Configuration');
     this.$('#edit-sc-description').val(this.model.get('description'));
+    this.$('#edit-sc-story-id').val(this.model.get('story_id'));
     this.$('#edit-sc-alpha-wait-oip').val(this.model.get('alpha_wait_oip'));
     this.$('#edit-sc-alpha-start-ask-oip').val(this.model.get('alpha_start_ask_oip'));
     this.$('#edit-sc-beta-join-ask-oip').val(this.model.get('beta_join_ask_oip'));
@@ -48,6 +49,7 @@ StoryEditView.PassageStoryConfigEditor = Backbone.View.extend({
     saveResult = this.model.save({
       name: this.$('.passageName').val(),
       description: this.$('#edit-sc-description').val(),
+      story_id: this.$('#edit-sc-story-id').val(),
       alpha_wait_oip: this.$('#edit-sc-alpha-wait-oip').val(),
       alpha_start_ask_oip: this.$('#edit-sc-alpha-start-ask-oip').val(),
       beta_join_ask_oip: this.$('#edit-sc-beta-join-ask-oip').val(),

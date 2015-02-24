@@ -70,8 +70,8 @@ var exportsms = function() {
       }
     }
 
-    config = _buildStoryConfig(configData, config)
-    config = _buildRegularLevels(regularLevelData, config);
+    config = _buildStoryConfig(configData, regularLevelData, config)
+    config = _buildRegularLevels(regularLevelData, endLevelData, config);
     config = _buildEndLevels(endLevelData, config);
     config = _buildEndGame(endLevelData, endGameData, config);
     return config;
@@ -167,27 +167,36 @@ var exportsms = function() {
    * @param attrs NamedNodeMap of attributes from a DOM element
    * @return Object
    */
-  function _buildStoryConfig(passageData) {
-    var data = {};
+  function _buildStoryConfig(configData, regularLevelData, config) {
+    var i
+      , storyStartOip;
 
-    data.__comments               = passageData.description || '';
-    data.alpha_wait_oip           = passageData.alpha_wait_oip || 0;
-    data.alpha_start_ask_oip      = passageData.alpha_start_ask_oip || 0;
-    data.beta_join_ask_oip        = passageData.beta_join_ask_oip || 0;
-    data.beta_wait_oip            = passageData.beta_wait_oip || 0;
-    data.game_in_progress_oip     = passageData.game_in_progress_oip || 0;
-    data.game_ended_from_exit_oip = passageData.game_ended_from_exit_oip || 0;
-    data.story_start_oip          = passageData.story_start_oip || 0;
-    data.ask_solo_play            = passageData.ask_solo_play || 0;
+    for (i = 0; i < regularLevelData.length; i++) {
+      if (regularLevelData[i].name == startLevelKey) {
+        storyStartOip = parseInt(regularLevelData[i].optinpath, 10);
+        break;
+      }
+    }
 
-    data.mobile_create = {};
-    data.mobile_create.ask_beta_1_oip         = passageData.mc_ask_beta_1_oip || 0;
-    data.mobile_create.ask_beta_2_oip         = passageData.mc_ask_beta_2_oip || 0;
-    data.mobile_create.invalid_mobile_oip     = passageData.mc_invalid_mobile_oip || 0;
-    data.mobile_create.not_enough_players_oip = passageData.mc_not_enough_players_oip || 0;
-    data._twinedata                           = passageData._twinedata;
+    config.__comments               = configData.description || '';
+    config._id                      = parseInt(configData.story_id, 10) || 0;
+    config.alpha_wait_oip           = parseInt(configData.alpha_wait_oip, 10) || 0;
+    config.alpha_start_ask_oip      = parseInt(configData.alpha_start_ask_oip, 10) || 0;
+    config.beta_join_ask_oip        = parseInt(configData.beta_join_ask_oip, 10) || 0;
+    config.beta_wait_oip            = parseInt(configData.beta_wait_oip, 10) || 0;
+    config.game_in_progress_oip     = parseInt(configData.game_in_progress_oip, 10) || 0;
+    config.game_ended_from_exit_oip = parseInt(configData.game_ended_from_exit_oip, 10) || 0;
+    config.ask_solo_play            = parseInt(configData.ask_solo_play, 10) || 0;
+    config.story_start_oip          = storyStartOip
 
-    return data;
+    config.mobile_create = {};
+    config.mobile_create.ask_beta_1_oip         = parseInt(configData.mc_ask_beta_1_oip, 10) || 0;
+    config.mobile_create.ask_beta_2_oip         = parseInt(configData.mc_ask_beta_2_oip, 10) || 0;
+    config.mobile_create.invalid_mobile_oip     = parseInt(configData.mc_invalid_mobile_oip, 10) || 0;
+    config.mobile_create.not_enough_players_oip = parseInt(configData.mc_not_enough_players_oip, 10) || 0;
+    config._twinedata                           = configData._twinedata;
+
+    return config;
   }
 
   /**
@@ -201,7 +210,7 @@ var exportsms = function() {
    * @return partialStory
    *   Object of normal level configuration objects. 
    */
-  function _buildRegularLevels(passageData, config) {
+  function _buildRegularLevels(passageData, endLevelData, config) {
     var partialStory,
         storyPassage,
         passage,
@@ -211,8 +220,7 @@ var exportsms = function() {
         answers,
         next,
         error,
-        i,j,k;
-
+        i,j,k,l;
 
     if (config.story) {
       partialStory = config.story;
@@ -243,17 +251,22 @@ var exportsms = function() {
           storyPassage.choices[j].key = key;
           storyPassage.choices[j].valid_answers = [answers];
 
-          // To get the `next` optinpath, search through all passageData to find the
+          // To get the `next` optinpath, search through all passageData and endLevelData to find the
           // passage.name that matches the key for this choice.
           for (k = 0; k < passageData.length; k++) {
             if (passageData[k].name == key) {
-              next = passageData[k].optinpath;
+              next = parseInt(passageData[k].optinpath, 10);
               break;
             }
           }
 
+          if (passage.name.charAt(2) != '0'){
+            next = 'END-LEVEL' + parseInt(passage.name.charAt(1), 10);
+          }
+
           storyPassage.choices[j].next = next;
-          if (next == 0) {
+
+          if (!next) {
             error = 'Next opt-in path not found for passage: ' + passage.name;
             console.log(error);
           }
@@ -387,7 +400,7 @@ var exportsms = function() {
               for (k = 0; k < keyArray.length; k ++) {
                 testKey = keyArray[k];
                 if (config.story[testKey].key == nextLevelString) {
-                  configObject.next_level = keyArray[k];
+                  configObject.next_level = parseInt(keyArray[k]);
                   break;
                 }
               }
@@ -461,7 +474,7 @@ var exportsms = function() {
       // Storing oip for an individual rank result.
       if (endGameDatum.type === PassageEndGameIndivRankResult.prototype.defaults.type) {
         rank = endGameDatum.rank;
-        oip = endGameDatum.optinpath;
+        oip = parseInt(endGameDatum.optinpath, 10);
         endGameObject["indiv-rank-oips"][rank] = oip;
       }
       // Storing oip for an individual superlative result, and setting up the logic choice object. 
@@ -482,7 +495,7 @@ var exportsms = function() {
             }
           }
         }
-        choiceObject.next = endGameDatum.optinpath;
+        choiceObject.next = parseInt(endGameDatum.optinpath, 10);
         choiceObject.flag = superlative;
         endGameObject.choices.push(choiceObject);
       }
@@ -492,7 +505,7 @@ var exportsms = function() {
         min = parseInt(endGameDatum.minnumlevelsuccess);
         max = parseInt(endGameDatum.maxnumlevelsuccess);
         for (k = min; k <= max; k++) {
-          endGameObject["group-success-failure-oips"][k] = endGameDatum.optinpath;
+          endGameObject["group-success-failure-oips"][k] = parseInt(endGameDatum.optinpath, 10);
         }
       }
     }
@@ -503,7 +516,7 @@ var exportsms = function() {
       if (endLevelDatum.type === 'passageEndLevelIndiv') {
         // Storing oip of an individual success level. Used to calculate endgame result of rank among others. 
         if (endLevelDatum.indivsuccesspath == 'true') {
-          endGameObject["indiv-level-success-oips"].push(endLevelDatum.optinpath);
+          endGameObject["indiv-level-success-oips"].push(parseInt(endLevelDatum.optinpath, 10));
         }
         // Storing the key of a passage which a user must traverse in order to receive a specific superlative endgame result. 
         if (endLevelDatum.indivsuperlativepath) {
@@ -521,7 +534,7 @@ var exportsms = function() {
       } 
       // Storing the oip of the end level passages which convey a group's success. Used to calculate the group success/failure endgame result. 
       else if (endLevelDatum.type === 'passageEndLevelGroup' && endLevelDatum.groupsuccesspath == 'true') {
-        endGameObject["group-level-success-oips"].push(endLevelDatum.optinpath);
+        endGameObject["group-level-success-oips"].push(parseInt(endLevelDatum.optinpath, 10));
       }
     }
 
