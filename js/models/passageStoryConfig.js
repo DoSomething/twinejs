@@ -5,6 +5,7 @@ var PassageStoryConfig = Passage.extend({
     type: 'storyConfig',
     name: 'Story Configuration',
     description: '',
+    story_id: 0,
     alpha_wait_oip: 0,
     alpha_start_ask_oip: 0,
     beta_join_ask_oip: 0,
@@ -33,6 +34,7 @@ var PassageStoryConfig = Passage.extend({
     'name="<%- name %>" position="<%- left %>,<%- top %>" ' +
     'type="<%- type %>" ' +
     'description="<%- description %>" ' +
+    'story_id="<%- story_id %>" ' + 
     'alpha_wait_oip="<%- alpha_wait_oip %>" ' +
     'alpha_start_ask_oip="<%- alpha_start_ask_oip %>" ' +
     'beta_join_ask_oip="<%- beta_join_ask_oip %>" ' +
@@ -59,8 +61,7 @@ var PassageStoryConfig = Passage.extend({
    * @return Array of string names
    */
   links: function(internalOnly) {
-    // @todo Assumes starting node will always be named 'L10'. Is this a poor assumption to make/thing to enforce?
-    return ['L10'];
+    return startLevelKey;
   },
 
   validate: function(attrs) {
@@ -82,6 +83,7 @@ var PassageStoryConfig = Passage.extend({
       top: this.get('top'),
       type: this.get('type'),
       description: this.get('description'),
+      story_id: this.get('story_id'),
       alpha_wait_oip: this.get('alpha_wait_oip'),
       alpha_start_ask_oip: this.get('alpha_start_ask_oip'),
       beta_join_ask_oip: this.get('beta_join_ask_oip'),
