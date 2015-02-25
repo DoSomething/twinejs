@@ -217,7 +217,7 @@ var exportsms = function() {
         optinpath,
         key,
         links,
-        answers,
+        answer,
         next,
         error,
         i,j,k,l;
@@ -242,14 +242,15 @@ var exportsms = function() {
 
         for (j = 0; links != null && j < links.length; j++) {
           // Assumes link format is [[display text|link|valid answers]]
-          key = links[j].replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$2');
-          answers = links[j].replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$3');
+          key = links[j].replace(/\[\[(.+)\|(.+)\]\]/g, '$2');
+          // Valid answer will be the last character of the passage's name (key). Ex: "A" for "L1A".
+          answer = key.charAt(key.length - 1);
           next = 0;
 
           // Build the choices array based on the links found
           storyPassage.choices[j] = {};
           storyPassage.choices[j].key = key;
-          storyPassage.choices[j].valid_answers = [answers];
+          storyPassage.choices[j].valid_answers = [answer];
 
           // To get the `next` optinpath, search through all passageData and endLevelData to find the
           // passage.name that matches the key for this choice.
