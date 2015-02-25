@@ -46,8 +46,9 @@ var PassageDS = Passage.extend({
       invalidLinks = 0;
 
       for (i = 0; i < matches.length; i++) {
-        // Link format: [[display text|link|valid answer]]
-        link = matches[i].replace(/\[\[(.+)\|(.+)\|(.+)\]\]/g, '$2');
+        // Link format: [[display text|link]]
+
+        link = matches[i].replace(/\[\[([^\|\]]*?)\|([^\|\]]*)?\]\]/g, "$2");
 
         if (link != matches[i] && link.length > 0) {
           result.push(link);
