@@ -5,8 +5,6 @@
 
 'use strict';
 
-var TOTAL_NUMBER_OF_LEVELS = 6;
-
 var exportsms = function() {
 
   /**
@@ -172,7 +170,7 @@ var exportsms = function() {
       , storyStartOip;
 
     for (i = 0; i < regularLevelData.length; i++) {
-      if (regularLevelData[i].name == startLevelKey) {
+      if (regularLevelData[i].name == START_LEVEL_KEY) {
         storyStartOip = parseInt(regularLevelData[i].optinpath, 10);
         break;
       }
@@ -220,7 +218,7 @@ var exportsms = function() {
         answer,
         next,
         error,
-        i,j,k,l;
+        i,j,k;
 
     if (config.story) {
       partialStory = config.story;
@@ -401,7 +399,7 @@ var exportsms = function() {
               for (k = 0; k < keyArray.length; k ++) {
                 testKey = keyArray[k];
                 if (config.story[testKey].key == nextLevelString) {
-                  configObject.next_level = parseInt(keyArray[k]);
+                  configObject.next_level = parseInt(keyArray[k], 10);
                   break;
                 }
               }

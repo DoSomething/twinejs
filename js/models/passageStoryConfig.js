@@ -61,7 +61,7 @@ var PassageStoryConfig = Passage.extend({
    * @return Array of string names
    */
   links: function(internalOnly) {
-    return startLevelKey;
+    return START_LEVEL_KEY;
   },
 
   validate: function(attrs) {

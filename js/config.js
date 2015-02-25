@@ -1,3 +1,4 @@
 // Contains "global" variables. 
 
-var startLevelKey = "L10";
+var START_LEVEL_KEY = "L10"
+  , TOTAL_NUMBER_OF_LEVELS = 6;
