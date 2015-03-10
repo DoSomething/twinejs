@@ -71,15 +71,16 @@ var Passage = Backbone.Model.extend(
 
   validate: function (attrs)
   {
-    if (! attrs.name || attrs.name == '')
+    if (! attrs.name || attrs.name == '') {
       return Passage.NO_NAME_ERROR;
-
+    }
     if (this.fetchStory().fetchPassages().find(function (passage)
         {
         return (attrs.id != passage.id &&
             attrs.name.toLowerCase() == passage.get('name').toLowerCase());
-        }))
+        })) {
       return Passage.DUPE_NAME_ERROR.replace('%s', attrs.name);
+    }
   },
 
   /**

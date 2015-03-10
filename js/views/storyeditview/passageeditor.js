@@ -64,6 +64,9 @@ StoryEditView.PassageEditor = Backbone.View.extend(
     _.each(this.model.get('tags'), this.addTag, this);
 
     this.$el.data('modal').trigger('show');
+
+    var message = this.$('.error');
+    message.css('display', 'none');
   },
 
   /**
@@ -91,6 +94,7 @@ StoryEditView.PassageEditor = Backbone.View.extend(
     // gather current tag names
 
     var tags = [];
+    var message = this.$('.error');
 
     this.$('.passageTags .tag').each(function()
     {
@@ -103,26 +107,14 @@ StoryEditView.PassageEditor = Backbone.View.extend(
       name: this.$('.passageName').val(),
       text: this.$('.passageText').val(),
       tags: tags
-    }))
-      this.$('.alert').remove();
-    else
-    {
-      // show the error message
-
-      var message = this.$('.alert');
-      
-      if (message.size() == 0)
-        message = $('<p class="alert alert-danger">')
-        .text(this.model.validationError);
-
-      this.$('.textareaContainer').before(message);
-      message.hide().fadeIn();
+    })){
+      this.$('.error').addClass('hide').hide();
+      message.css('display', 'none');
+    }
+    else {
+      message.css('display', 'block').text(this.model.validationError);
       this.$('.passageName').focus();
-
-      // if we are handling an event, stop it
-
-      if (e)
-        e.stopImmediatePropagation();
+      alert(this.model.validationError);
     };
   },
 
