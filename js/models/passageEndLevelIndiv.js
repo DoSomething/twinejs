@@ -26,7 +26,7 @@ var PassageEndLevelIndiv = Passage.extend({
   },
 
   validate: function(attrs) {
-
+    return PassageDS.prototype.validate.call(this, attrs);
   },
 
   /**

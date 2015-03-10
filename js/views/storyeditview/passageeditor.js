@@ -113,7 +113,6 @@ StoryEditView.PassageEditor = Backbone.View.extend(
     }
     else {
       message.css('display', 'block').text(this.model.validationError);
-      this.$('.passageName').focus();
       alert(this.model.validationError);
     };
   },

@@ -60,7 +60,6 @@ StoryEditView.PassageEndGameGroupSuccessNumberResultEditor = Backbone.View.exten
     else {
       var message = this.$('.error');
       message.css('display', 'block').text(this.model.validationError);
-      this.$('.passageName').focus();
       alert(this.model.validationError);
     }
 

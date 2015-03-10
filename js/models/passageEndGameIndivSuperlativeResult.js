@@ -26,7 +26,7 @@ var PassageEndGameIndivSuperlativeResult = Passage.extend({
   },
 
   validate: function(attrs) {
-
+    return PassageDS.prototype.validate.call(this, attrs);
   },
 
   publish: function(id) {

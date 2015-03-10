@@ -29,7 +29,6 @@ var PassageDS = Passage.extend(
       , oip;
 
     returnStatement = Passage.prototype.validate.call(this, attrs)
-
     oip = attrs.optinpath;
 
     if (!returnStatement) {
@@ -40,7 +39,7 @@ var PassageDS = Passage.extend(
       // Checks for duplicate opt in paths. 
       thereIsADuplicate = this.fetchStory().fetchPassages().find(
         function(passage){
-          duplicatePassageName = passage.name
+          duplicatePassageName = passage.get('name');
           return (attrs.id != passage.id && oip == passage.get('optinpath'));
         }
       )
@@ -125,5 +124,5 @@ var PassageDS = Passage.extend(
 },
 {
   NO_OIP_ERROR: 'You must give this passage an opt-in-path.',
-  DUPE_OIP_ERROR: 'There is already a passage ("%s") with this opt-in-path. Please give this one a unique opt-in-path.'
+  DUPE_OIP_ERROR: 'There is already a passage--"%s"--with this opt-in-path. Please give this one a unique opt-in-path.'
 });
