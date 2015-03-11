@@ -22,35 +22,32 @@ var PassageDS = Passage.extend(
     Passage.prototype.initialize.apply(this);
   },
 
-  validate: function(attrs) {
-    var returnStatement
-      , thereIsADuplicate
-      , duplicatePassageName
-      , oip;
+  // Checks for presence of non-duplicated optin path. 
+  hasValidOptinPath: function() {
+    var oip, 
+        id
+        ;
 
-    returnStatement = Passage.prototype.validate.call(this, attrs)
-    oip = attrs.optinpath;
+    oip = this.get('optinpath');
+    id = this.get('id');
 
-    if (!returnStatement) {
-      // Checks for presence of opt in path value. 
-      if (! oip || oip == '' || oip == 0) {
-        return PassageDS.NO_OIP_ERROR;
-      }
-      // Checks for duplicate opt in paths. 
-      thereIsADuplicate = this.fetchStory().fetchPassages().find(
-        function(passage){
-          duplicatePassageName = passage.get('name');
-          return (attrs.id != passage.id && oip == passage.get('optinpath'));
-        }
-      )
-
-      if (thereIsADuplicate) {
-        return PassageDS.DUPE_OIP_ERROR.replace('%s', duplicatePassageName);
-      }
-
+    if (! oip || oip == '' || oip == 0) {
+      return false;
     }
 
-    return returnStatement;
+    // Checks for duplicate opt in paths. 
+    var hasDuplicate = this.fetchStory().fetchPassages().find(
+      function(passage){
+        if (id != passage.id && oip == passage.get('optinpath')) {
+          return true;
+        }
+      }
+    )
+    return !hasDuplicate;
+  },
+
+  validate: function(attrs) {
+    return Passage.prototype.validate.call(this, attrs);
   },
 
   /**
