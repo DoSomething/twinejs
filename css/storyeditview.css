@@ -156,6 +156,11 @@
   background-color: hsla(0, 100%, 60%, 0.5);
 }
 
+#storyEditView .passage.brokenOip .frame
+{
+  background-color: hsla(50, 100%, 60%, 0.5);
+}
+
 #storyEditView .passage.start .frame
 {
   border-width: 4px;

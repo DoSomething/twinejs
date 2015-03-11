@@ -105,6 +105,13 @@ var PassageItemView = Marionette.ItemView.extend(
     else
       this.$el.addClass('brokenLink');
 
+    if (typeof this.model.hasOptinPath == 'function' && !this.model.hasOptinPath()) {
+      this.$el.addClass('brokenOip');
+    }
+    else {
+      this.$el.removeClass('brokenOip');
+    }
+
     // set CSS class for starting point
 
     if (this.parentView.model.get('startPassage') == this.model.id)
