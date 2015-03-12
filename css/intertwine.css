@@ -12,3 +12,8 @@
 {
   top: 21.5em;
 }
+
+#storyEditView .passage.brokenOip .frame
+{
+  background-color: hsla(50, 100%, 60%, 0.5);
+}

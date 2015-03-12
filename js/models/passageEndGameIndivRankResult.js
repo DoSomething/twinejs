@@ -24,8 +24,12 @@ var PassageEndGameIndivRankResult = Passage.extend({
     Passage.prototype.initialize.apply(this);
   },
 
-  validate: function(attrs) {
+  hasValidOptinPath: function() {
+    return PassageDS.prototype.hasValidOptinPath.apply(this);
+  },
 
+  validate: function(attrs) {
+    return PassageDS.prototype.validate.call(this, attrs);
   },
 
   publish: function(id) {

@@ -1,6 +1,7 @@
 'use strict';
 
-var PassageDS = Passage.extend({
+var PassageDS = Passage.extend(
+{
   defaults: {
     type: 'ds',
     top: 0,
@@ -21,8 +22,32 @@ var PassageDS = Passage.extend({
     Passage.prototype.initialize.apply(this);
   },
 
-  validate: function(attrs) {
+  // Checks for presence of non-duplicated optin path. 
+  hasValidOptinPath: function() {
+    var oip, 
+        id
+        ;
 
+    oip = this.get('optinpath');
+    id = this.get('id');
+
+    if (! oip || oip == '' || oip == 0) {
+      return false;
+    }
+
+    // Checks for duplicate opt in paths. 
+    var hasDuplicate = this.fetchStory().fetchPassages().find(
+      function(passage){
+        if (id != passage.id && oip == passage.get('optinpath')) {
+          return true;
+        }
+      }
+    )
+    return !hasDuplicate;
+  },
+
+  validate: function(attrs) {
+    return Passage.prototype.validate.call(this, attrs);
   },
 
   /**
@@ -93,4 +118,8 @@ var PassageDS = Passage.extend({
     });
   }
 
+},
+{
+  NO_OIP_ERROR: 'You must give this passage an opt-in-path.',
+  DUPE_OIP_ERROR: 'There is already a passage--"%s"--with this opt-in-path. Please give this one a unique opt-in-path.'
 });

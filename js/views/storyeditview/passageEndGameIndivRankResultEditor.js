@@ -10,6 +10,9 @@ StoryEditView.PassageEndGameIndivRankResultEditor = Backbone.View.extend({
    * Opens modal dialog for editing the passage.
    */
   open: function() {
+    this.prevTitle = document.title;
+    document.title = this.model.get('name');
+
     this.$('.passageId').val(this.model.id);
     this.$('.passageName').val(this.model.get('name'));
     var text = this.model.get('text');
@@ -17,6 +20,9 @@ StoryEditView.PassageEndGameIndivRankResultEditor = Backbone.View.extend({
     this.$('#edit-ds-oip').val(this.model.get('optinpath'));
     this.$('#rank').val(this.model.get('rank'));
     this.$el.data('modal').trigger('show');
+
+    var message = this.$('.error');
+    message.css('display', 'none');
   },
 
   /**
@@ -35,6 +41,7 @@ StoryEditView.PassageEndGameIndivRankResultEditor = Backbone.View.extend({
    */
   save: function(e) {
     var saveResult;
+    var message = this.$('.error');
 
     saveResult = this.model.save({
       name: this.$('.passageName').val(),
@@ -45,9 +52,12 @@ StoryEditView.PassageEndGameIndivRankResultEditor = Backbone.View.extend({
 
     if (saveResult) {
       this.$('.alert').remove();
+      message.css('display', 'none');
     }
     else {
-      // @todo show error message
+      var message = this.$('.error');
+      message.css('display', 'block').text(this.model.validationError);
+      alert(this.model.validationError);
     }
 
     if (e) {

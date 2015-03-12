@@ -105,6 +105,13 @@ var PassageItemView = Marionette.ItemView.extend(
     else
       this.$el.addClass('brokenLink');
 
+    // set CSS class for missing or duplicated OIPs
+    if (typeof this.model.hasValidOptinPath == 'function' && !this.model.hasValidOptinPath()) {
+      this.$el.addClass('brokenOip');
+    }
+    else {
+      this.$el.removeClass('brokenOip');
+    }
     // set CSS class for starting point
 
     if (this.parentView.model.get('startPassage') == this.model.id)
