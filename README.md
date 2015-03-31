@@ -1,21 +1,14 @@
-twinejs
+Intertwine
 -------
-
-by Chris Klimas, Leon Arnott, Daithi O Crualaoich, Ingrid Cheung, Thomas
-Michael Edwards, Micah Fitch, Juhana Leinonen, and Ross Smith
 
 ### SYNOPSIS
 
-This is a port of Twine to a local browser-based app. See
-[twinery.org](http://twinery.org) for more info.
+Intertwine is a modification of [Twine.js](https://bitbucket.org/klembot/twinejs), 
+the wonderful interactive fiction game creation tool created by Chris Klimas, Leon 
+Arnott, Daithi O Crualaoich, Ingrid Cheung, Thomas Michael Edwards, Micah Fitch, 
+Juhana Leinonen, and Ross Smith. We're greatly in their debt, and thanks. 
 
-The story formats in minified format under storyformats/ exist in separate
-repositories:
-* [Harlowe](https://bitbucket.org/_L_/harlowe)
-* [Snowman](https://bitbucket.org/klembot/snowman-2)
-* [Paperthin](https://bitbucket.org/klembot/paperthin)
-
-### INSTALL
+### INSTALLATION
 
 Run `npm install` at the top level of the directory to install all goodies.
 
@@ -36,3 +29,17 @@ automated browser testing. Unfortunately, Selenium IDE does not like running on
 the file:// protocol because of JavaScript security restrictions. To facilitate
 testing, run `grunt server`, which will spin up a basic web server on port
 8000.
+
+### CREATING A GAME
+
+### SAVING A GAME
+
+When you've created a game in your browser, that game is stored in the local memory of your personal machine, **NOT** in cloud storage accessible across machines or browsers. 
+
+This means that in order to create an Intertwine game on one machine and edit it on another, it's important to 
+
+### IMPORTING A GAME
+
+If 
+
+### PLAYING THROUGH A GAME
