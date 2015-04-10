@@ -18,6 +18,7 @@ StoryEditView.PassageStoryConfigEditor = Backbone.View.extend({
     this.$('#edit-sc-alpha-wait-oip').val(this.model.get('alpha_wait_oip'));
     this.$('#edit-sc-alpha-start-ask-oip').val(this.model.get('alpha_start_ask_oip'));
     this.$('#edit-sc-beta-join-ask-oip').val(this.model.get('beta_join_ask_oip'));
+    this.$('#edit-sc-beta-joined-notify-other-betas-oip').val(this.model.get('beta_joined_notify_other_betas_oip'));
     this.$('#edit-sc-beta-wait-oip').val(this.model.get('beta_wait_oip'));
     this.$('#edit-sc-game-in-progress-oip').val(this.model.get('game_in_progress_oip'));
     this.$('#edit-sc-game-ended-from-exit-oip').val(this.model.get('game_ended_from_exit_oip'));
@@ -53,6 +54,7 @@ StoryEditView.PassageStoryConfigEditor = Backbone.View.extend({
       alpha_wait_oip: this.$('#edit-sc-alpha-wait-oip').val(),
       alpha_start_ask_oip: this.$('#edit-sc-alpha-start-ask-oip').val(),
       beta_join_ask_oip: this.$('#edit-sc-beta-join-ask-oip').val(),
+      beta_joined_notify_other_betas_oip: this.$('#edit-sc-beta-joined-notify-other-betas-oip').val(),
       beta_wait_oip: this.$('#edit-sc-beta-wait-oip').val(),
       game_in_progress_oip: this.$('#edit-sc-game-in-progress-oip').val(),
       game_ended_from_exit_oip: this.$('#edit-sc-game-ended-from-exit-oip').val(),

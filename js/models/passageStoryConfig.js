@@ -9,6 +9,7 @@ var PassageStoryConfig = Passage.extend({
     alpha_wait_oip: 0,
     alpha_start_ask_oip: 0,
     beta_join_ask_oip: 0,
+    beta_joined_notify_other_betas_oip: 0,
     beta_wait_oip: 0,
     game_in_progress_oip: 0,
     game_ended_from_exit_oip: 0,
@@ -38,6 +39,7 @@ var PassageStoryConfig = Passage.extend({
     'alpha_wait_oip="<%- alpha_wait_oip %>" ' +
     'alpha_start_ask_oip="<%- alpha_start_ask_oip %>" ' +
     'beta_join_ask_oip="<%- beta_join_ask_oip %>" ' +
+    'beta_joined_notify_other_betas_oip="<%- beta_joined_notify_other_betas_oip %>" ' +
     'beta_wait_oip="<%- beta_wait_oip %>" ' +
     'game_in_progress_oip="<%- game_in_progress_oip %>" ' +
     'game_ended_from_exit_oip="<%- game_ended_from_exit_oip %>" ' +
@@ -87,6 +89,7 @@ var PassageStoryConfig = Passage.extend({
       alpha_wait_oip: this.get('alpha_wait_oip'),
       alpha_start_ask_oip: this.get('alpha_start_ask_oip'),
       beta_join_ask_oip: this.get('beta_join_ask_oip'),
+      beta_joined_notify_other_betas_oip: this.get('beta_joined_notify_other_betas_oip'),
       beta_wait_oip: this.get('beta_wait_oip'),
       game_in_progress_oip: this.get('game_in_progress_oip'),
       game_ended_from_exit_oip: this.get('game_ended_from_exit_oip'),
