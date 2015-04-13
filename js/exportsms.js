@@ -176,6 +176,7 @@ var exportsms = function() {
       }
     }
 
+    // @todo: use Object.keys to run through and assign properties, instead of hard-coding solution below
     config.__comments               = configData.description || '';
     config._id                      = parseInt(configData.story_id, 10) || 0;
     config.alpha_wait_oip           = parseInt(configData.alpha_wait_oip, 10) || 0;
@@ -193,6 +194,7 @@ var exportsms = function() {
     config.mobile_create.invalid_mobile_oip     = parseInt(configData.mc_invalid_mobile_oip, 10) || 0;
     config.mobile_create.not_enough_players_oip = parseInt(configData.mc_not_enough_players_oip, 10) || 0;
     config._twinedata                           = configData._twinedata;
+    config.beta_joined_notify_other_betas_oip   = parseInt(configData.beta_joined_notify_other_betas_oip, 10) || 0;
 
     return config;
   }
