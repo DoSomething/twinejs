@@ -15,6 +15,12 @@ var PassageStoryConfig = Passage.extend({
     game_ended_from_exit_oip: 0,
     ask_solo_play: 0,
 
+    // Opt-in paths for end-level feedback featuring player names
+    end_level_0_correct_loss: 0,
+    end_level_1_correct_loss: 0,
+    end_level_1_to_4_correct_win: 0,
+    end_level_solo_correct_win: 0,
+
     // Opt-in paths for games created via mobile
     mc_ask_beta_1_oip: 0,
     mc_ask_beta_2_oip: 0,
@@ -48,6 +54,10 @@ var PassageStoryConfig = Passage.extend({
     'mc_ask_beta_2_oip="<%- mc_ask_beta_2_oip %>" ' +
     'mc_invalid_mobile_oip="<%- mc_invalid_mobile_oip %>" ' +
     'mc_not_enough_players_oip="<%- mc_not_enough_players_oip %>" ' +
+    'end_level_0_correct_loss="<%- end_level_0_correct_loss %>" ' +
+    'end_level_1_correct_loss="<%- end_level_1_correct_loss %>" ' +
+    'end_level_1_to_4_correct_win="<%- end_level_1_to_4_correct_win %>" ' +
+    'end_level_solo_correct_win="<%- end_level_solo_correct_win %>" ' +
     '></tw-passageStoryConfigData>'),
 
   initialize: function() {
@@ -97,7 +107,11 @@ var PassageStoryConfig = Passage.extend({
       mc_ask_beta_1_oip: this.get('mc_ask_beta_1_oip'),
       mc_ask_beta_2_oip: this.get('mc_ask_beta_2_oip'),
       mc_invalid_mobile_oip: this.get('mc_invalid_mobile_oip'),
-      mc_not_enough_players_oip: this.get('mc_not_enough_players_oip')
+      mc_not_enough_players_oip: this.get('mc_not_enough_players_oip'),
+      end_level_0_correct_loss: this.get('end_level_0_correct_loss'),
+      end_level_1_correct_loss: this.get('end_level_1_correct_loss'),
+      end_level_1_to_4_correct_win: this.get('end_level_1_to_4_correct_win'),
+      end_level_solo_correct_win: this.get('end_level_solo_correct_win')
     });
   }
 

@@ -195,6 +195,10 @@ var exportsms = function() {
     config.mobile_create.not_enough_players_oip = parseInt(configData.mc_not_enough_players_oip, 10) || 0;
     config._twinedata                           = configData._twinedata;
     config.beta_joined_notify_other_betas_oip   = parseInt(configData.beta_joined_notify_other_betas_oip, 10) || 0;
+    config.end_level_0_correct_loss             = parseInt(configData.end_level_0_correct_loss, 10) || 0;
+    config.end_level_1_correct_loss             = parseInt(configData.end_level_1_correct_loss, 10) || 0;
+    config.end_level_1_to_4_correct_win         = parseInt(configData.end_level_1_to_4_correct_win, 10) || 0;
+    config.end_level_solo_correct_win           = parseInt(configData.end_level_solo_correct_win, 10) || 0;
 
     return config;
   }

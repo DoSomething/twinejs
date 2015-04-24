@@ -27,6 +27,10 @@ StoryEditView.PassageStoryConfigEditor = Backbone.View.extend({
     this.$('#edit-sc-ask-beta-2-oip').val(this.model.get('mc_ask_beta_2_oip'));
     this.$('#edit-sc-invalid-mobile-oip').val(this.model.get('mc_invalid_mobile_oip'));
     this.$('#edit-sc-not-enough-players-oip').val(this.model.get('mc_not_enough_players_oip'));
+    this.$('#edit-end-level-0-correct-loss').val(this.model.get('end_level_0_correct_loss'));
+    this.$('#edit-end-level-1-correct-loss').val(this.model.get('end_level_1_correct_loss'));
+    this.$('#edit-end-level-1-to-4-correct-win').val(this.model.get('end_level_1_to_4_correct_win'));
+    this.$('#edit-end-level-solo-correct-win').val(this.model.get('end_level_solo_correct_win'));
 
     this.$el.data('modal').trigger('show');
   },
@@ -62,7 +66,11 @@ StoryEditView.PassageStoryConfigEditor = Backbone.View.extend({
       mc_ask_beta_1_oip: this.$('#edit-sc-ask-beta-1-oip').val(),
       mc_ask_beta_2_oip: this.$('#edit-sc-ask-beta-2-oip').val(),
       mc_invalid_mobile_oip: this.$('#edit-sc-invalid-mobile-oip').val(),
-      mc_not_enough_players_oip: this.$('#edit-sc-not-enough-players-oip').val()
+      mc_not_enough_players_oip: this.$('#edit-sc-not-enough-players-oip').val(),
+      end_level_0_correct_loss: this.$('#edit-end-level-0-correct-loss').val(),
+      end_level_1_correct_loss: this.$('#edit-end-level-1-correct-loss').val(),
+      end_level_1_to_4_correct_win: this.$('#edit-end-level-1-to-4-correct-win').val(),
+      end_level_solo_correct_win: this.$('#edit-end-level-solo-correct-win').val()
     });
 
     if (saveResult) {
