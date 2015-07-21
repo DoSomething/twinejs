@@ -189,10 +189,14 @@ var exportsms = function() {
     config.story_start_oip          = storyStartOip
 
     config.mobile_create = {};
+
+    config.mobile_create.ask_beta_0_oip         = parseInt(configData.mc_ask_beta_0_oip, 10) || 0;
     config.mobile_create.ask_beta_1_oip         = parseInt(configData.mc_ask_beta_1_oip, 10) || 0;
     config.mobile_create.ask_beta_2_oip         = parseInt(configData.mc_ask_beta_2_oip, 10) || 0;
     config.mobile_create.invalid_mobile_oip     = parseInt(configData.mc_invalid_mobile_oip, 10) || 0;
     config.mobile_create.not_enough_players_oip = parseInt(configData.mc_not_enough_players_oip, 10) || 0;
+    config.mobile_create.invalid_alpha_first_name_oip = parseInt(configData.mc_invalid_alpha_first_name_oip, 10) || 0;
+
     config._twinedata                           = configData._twinedata;
     config.beta_joined_notify_other_betas_oip   = parseInt(configData.beta_joined_notify_other_betas_oip, 10) || 0;
     config.end_level_0_correct_loss             = parseInt(configData.end_level_0_correct_loss, 10) || 0;
