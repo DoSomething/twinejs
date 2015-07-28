@@ -5,6 +5,7 @@ var START_LEVEL_KEY = "L10"
   , PRELOADS = [
     {"name": "Science_Sleuth_2014", "filename": "sciencesleuth2014.html"},
     {"name": "Blank Game Template (sci sleu format)", "filename": "blankgametemplate.html"},
-    {"name": "The Bully Text: Talent Show-Off", "filename": "bullytexttalentshowoff2015.html"}
+    {"name": "The Bully Text: Talent Show-Off", "filename": "bullytexttalentshowoff2015.html"},
+    {"name": "The WWE Bully Text 2015", "filename": "WWEBullyText2015.html"}
   ]
   ;
