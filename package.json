@@ -1,0 +1,28 @@
+{
+  "name": "intertwine",
+  "version": "1.0.0",
+  "author": "developers@dosomething.org",
+  "description": "A GUI for creating DoSomething.org non-linear SMS interactive stories",
+  "license": "GPL v3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DoSomething/intertwine"
+  },
+  "dependencies": {
+    "grunt": "*",
+    "grunt-bake": "*",
+    "grunt-cdnify": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-connect": "^0.8.0",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-yuidoc": "*",
+    "grunt-replace": "*",
+    "grunt-usemin": "*",
+    "require": "*"
+  }
+}

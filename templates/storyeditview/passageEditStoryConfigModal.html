@@ -1,0 +1,80 @@
+<div id="passageStoryConfigModal" class="editModal modal hide">
+  <button class="save close subtle" data-modal-hide="this">
+    <i class="fa fa-times"></i>
+  </button>
+
+  <p class="title">
+    <input type="text" class="passageName block fillin" value="Story Configuration" disabled>
+  </p>
+
+  <div class="content">
+    <label for="edit-sc-description">Description</label>
+    <input type="text" id="edit-sc-description" class="block fillin">
+    <label for="edit-sc-story-id">ID</label>
+    <input type="text" id="edit-sc-story-id" class="block fillin">
+
+    <h3>Start Game Opt-in Paths</h3>
+
+    <label for="edit-sc-alpha-wait-oip">Alpha Wait OIP</label>
+    <input type="number" id="edit-sc-alpha-wait-oip" name="sc-alpha-wait-oip" class="block fillin">
+
+    <label for="edit-sc-alpha-start-ask-oip">Alpha Start Ask OIP</label>
+    <input type="number" id="edit-sc-alpha-start-ask-oip" name="sc-alpha-start-ask-oip" class="block fillin">
+
+    <label for="edit-sc-beta-wait-oip">Beta Wait OIP</label>
+    <input type="number" id="edit-sc-beta-wait-oip" name="sc-beta-wait-oip" class="block fillin">
+
+    <label for="edit-sc-beta-join-ask-oip">Beta Join Ask OIP</label>
+    <input type="number" id="edit-sc-beta-join-ask-oip" name="sc-beta-join-ask-oip" class="block fillin">
+
+    <label for="beta-joined-notify-other-betas-oip">Beta Joined Notify Other Betas</label>
+    <input type="number" id="edit-sc-beta-joined-notify-other-betas-oip" name="sc-beta-joined-notify-other-betas-oip" class="block fillin">
+
+    <h3>Ask if player wants to go solo</h3>
+
+    <label for="edit-sc-ask-solo-play">Ask Solo Play OIP</label>
+    <input type="number" id="edit-sc-ask-solo-play" name="sc-ask-solo-play" class="block fillin">
+
+    <h3>Error Messages</h3>
+    <label for="edit-sc-game-in-progress-oip">Game In Progress OIP</label>
+    <input type="number" id="edit-sc-game-in-progress-oip" name="sc-game-in-progress-oip" class="block fillin">
+
+    <label for="edit-sc-game-ended-from-exit-oip">Game Ended From Exit OIP</label>
+    <input type="number" id="edit-sc-game-ended-from-exit-oip" name="sc-game-ended-from-exit-oip" class="block fillin">
+
+    <h3>Mobile Creation Opt-in Paths</h3>
+
+    <label for="edit-sc-ask-beta-0-oip">Ask Beta Mobile 0</label>
+    <input type="number" id="edit-sc-ask-beta-0-oip" name="sc-ask-beta-0-oip" class="block fillin">
+
+    <label for="edit-sc-ask-beta-1-oip">Ask Beta 1</label>
+    <input type="number" id="edit-sc-ask-beta-1-oip" name="sc-ask-beta-1-oip" class="block fillin">
+
+    <label for="edit-sc-ask-beta-2-oip">Ask Beta 2</label>
+    <input type="number" id="edit-sc-ask-beta-2-oip" name="sc-ask-beta-2-oip" class="block fillin">
+
+    <label for="edit-sc-invalid-mobile-oip">Invalid Mobile</label>
+    <input type="number" id="edit-sc-invalid-mobile-oip" name="sc-invalid-mobile-oip" class="block fillin">
+
+    <label for="edit-sc-not-enough-players-oip">Not Enough Players</label>
+    <input type="number" id="edit-sc-not-enough-players-oip" name="sc-not-enough-players-oip" class="block fillin">
+
+    <label for="edit-sc-invalid-alpha-first-name-oip">Invalid Alpha First Name</label>
+    <input type="number" id="edit-sc-invalid-alpha-first-name-oip" name="sc-invalid-alpha-first-name-oip" class="block fillin">
+
+    <h3>End Level Feedback Messages With Player Names</h3>
+
+    <label for="edit-end-level-0-correct-loss">End Level 0 Correct, Loss (0 players correct out of 1-4)</label>
+    <input type="number" id="edit-end-level-0-correct-loss" name="end-level-0-correct-loss" class="block fillin">
+
+    <label for="edit-end-level-1-correct-loss">End Level 1 Correct, Loss (1 player correct out of 3-4)</label>
+    <input type="number" id="edit-end-level-1-correct-loss" name="end-level-1-correct-loss" class="block fillin">
+
+    <label for="edit-end-level-1-to-4-correct-win">End Level 1-4 Correct, Win (1/2, 2/3, 3/3, 2/4, 3/4, 4/4 players correct)</label>
+    <input type="number" id="edit-end-level-1-to-4-correct-win" name="end-level-1-to-4-correct-win" class="block fillin">
+
+    <label for="edit-end-level-solo-correct-win">End Level Solo 1 Correct, Win (1/1 players correct)</label>
+    <input type="number" id="edit-end-level-solo-correct-win" name="end-level-solo-correct-win" class="block fillin">
+
+  </div>
+</div>

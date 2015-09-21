@@ -1,0 +1,19 @@
+/* 
+  Custom styles and overrides of twine.js styles.
+*/
+
+#add-node 
+{
+  margin-left: -20em;
+  width: 40em;
+}
+
+#passage-ds-text
+{
+  top: 21.5em;
+}
+
+#storyEditView .passage.brokenOip .frame
+{
+  background-color: hsla(50, 100%, 60%, 0.5);
+}
